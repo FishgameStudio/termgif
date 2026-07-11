@@ -26,7 +26,7 @@ classifiers = [
 dependencies = [
     "pyte>=0.8.2",
     "pillow>=12.3.0", 
-    "winpty>=3.0.0"
+    "pywinpty>=3.0.0"
 ]
 
 [project.optional-dependencies]

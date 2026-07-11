@@ -84,10 +84,10 @@ Include these details:
 3. Attach sample code snippets for reference if possible
 
 ## 7. Directory Structure Rules
-- Demo samples: `examples/` (do not scatter samples inside `src/`)
+- Demo samples: `examples/` (do not scatter samples inside `termgif/`)
 - Unit tests: `tests/`
 - Documentation: `docs/`
-- Core source code: `src/`
+- Core source code: `termgif/`
 
 ## 8. Open Source License Notice
 By submitting any code, document or asset to this repository, you agree that:

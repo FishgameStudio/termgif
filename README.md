@@ -128,7 +128,7 @@ This is an example of how to list things you need to use the software and how to
   ```sh
   # print all dependencies
   hatch dep show
-  # peinr dependencies on group dep
+  # print dependencies on group dep
   hatch dep show dev
   ```
 

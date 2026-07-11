@@ -18,6 +18,7 @@ import logging
 import os
 from dataclasses import dataclass
 from pathlib import Path
+from pyte.screens import Char, StaticDefaultDict
 from typing import Any, cast as _typing_cast
 from collections.abc import Sequence
 import pyte
@@ -96,10 +97,10 @@ def _screen_line(screen: pyte.Screen, row: int) -> str:
 
     # Fallback: screen.buffer
     try:
-        row_buf = screen.buffer.get(row, [])  # type: ignore[union-attr]
+        row_buf: StaticDefaultDict[int, Char] | list[Any] = screen.buffer.get(row, [])
     except Exception:
         try:
-            row_buf = screen.buffer[row]  # type: ignore[index]
+            row_buf = screen.buffer[row]
         except Exception:
             return ""
 

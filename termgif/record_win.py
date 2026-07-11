@@ -12,7 +12,7 @@ import json
 import time
 
 
-def record_with_winpty(cmdlist: list[str], out_path: str, width: int = 80, height: int = 24):
+def record_with_winpty(cmdlist: list[str], out_path: str, width: int = 80, height: int = 24) -> None:
     import winpty
 
     # Build command line string for spawn (winpty expects a commandline string)
@@ -43,7 +43,7 @@ def record_with_winpty(cmdlist: list[str], out_path: str, width: int = 80, heigh
     print(f"Recorded {len(events)} events -> {out_path}")
 
 
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser()
     _ = parser.add_argument("-o", "--out", required=True, help="Output cast file (JSON)")
     _ = parser.add_argument("--width", type=int, default=80)

@@ -1,0 +1,90 @@
+[build-system]
+requires = ["setuptools>=64.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "termgif"
+version = "0.1.0"
+authors = [
+  { name = "Fishgame Studio", email = "popxh@outlook.com" }
+]
+description = "A simple and lightweight static GIF generator."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { file = "LICENSE" }
+keywords = ["termgif", "gif", "generator", "terminal"]
+classifiers = [
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Operating System :: Microsoft :: Windows",
+  "Operating System :: POSIX :: Linux",
+  "Operating System :: MacOS",
+  "License :: OSI Approved :: MIT License",
+  "Topic :: GIF Generator :: Static gif generator"
+]
+dependencies = [
+    "pyte>=0.8.2",
+    "pillow>=12.3.0", 
+    "winpty>=3.0.0"
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=7.0",
+  "mypy>=1.8",
+  "build",
+  "twine"
+]
+examples = [
+  "pillow>=10.0"
+]
+
+[project.urls]
+Homepage = "https://github.com/FishgameStudio/termgif"
+Repository = "https://github.com/FishgameStudio/termgif.git"
+Issues = "https://github.com/FishgameStudio/termgif/issues"
+
+# Ruff code checking & formatting
+[tool.ruff]
+line-length = 120
+target-version = "py314"
+select = [
+  "E", "W", "F",
+  "I",    # import sort
+  "UP",   # pyupgrade
+  "SIM",  # simplification
+]
+fix = true
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+
+# Black format
+[tool.black]
+line-length = 120
+target-version = ["py314"]
+skip-string-normalization = false
+
+# Mypy static type checking
+[tool.mypy]
+python_version = "3.14"
+strict = true
+ignore_missing_imports = false
+show_error_codes = true
+
+# Pytest unit test
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = "test_*.py"
+addopts = "--cov=termgif --cov-report=term-missing"
+
+# packaging configuration
+[tool.setuptools]
+packages = ["termgif"]
+package-dir = {"" = "termgif"}
+include-package-data = true
+
+[tool.setuptools.package-data]
+"termgif" = ["termgif/assets/*", "assets/*"]

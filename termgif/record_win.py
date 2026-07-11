@@ -5,13 +5,16 @@ Usage examples (cmd):
 PowerShell:
   python record_win.py -o session.cast -- powershell -Command "for ($i=0;$i -lt 5;$i++){Write-Output \"line $i\"; Start-Sleep -Milliseconds 200}"
 """
+
 # pyright: reportMissingTypeStubs=false, reportUnknownMemberType=false, reportAny=false
 import argparse
 import json
 import time
 
-def record_with_winpty(cmdlist: list[str], out_path: str, width: int =80, height: int =24):
+
+def record_with_winpty(cmdlist: list[str], out_path: str, width: int = 80, height: int = 24) -> None:
     import winpty
+
     # Build command line string for spawn (winpty expects a commandline string)
     cmdline: str = " ".join(cmdlist)
     p: winpty.ptyprocess.PtyProcess = winpty.PtyProcess.spawn(argv=cmdline)
@@ -39,7 +42,8 @@ def record_with_winpty(cmdlist: list[str], out_path: str, width: int =80, height
         json.dump(cast, f, ensure_ascii=False)
     print(f"Recorded {len(events)} events -> {out_path}")
 
-def main():
+
+def main() -> None:
     parser = argparse.ArgumentParser()
     _ = parser.add_argument("-o", "--out", required=True, help="Output cast file (JSON)")
     _ = parser.add_argument("--width", type=int, default=80)
@@ -47,9 +51,10 @@ def main():
     _ = parser.add_argument("cmd", nargs=argparse.REMAINDER, help="Command to run (after --)")
     args: argparse.Namespace = parser.parse_args()
     if not args.cmd:
-        parser.error("Missing command. Example: python record_win.py -o session.cast -- cmd /c \"echo hi\"")
+        parser.error('Missing command. Example: python record_win.py -o session.cast -- cmd /c "echo hi"')
     # args.cmd is list; keep as-is (works if user supplies full tokens)
     record_with_winpty(args.cmd, args.out, width=args.width, height=args.height)
+
 
 if __name__ == "__main__":
     main()

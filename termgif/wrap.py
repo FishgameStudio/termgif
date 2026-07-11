@@ -38,15 +38,15 @@ This function is Windows-only (depends on pywinpty).
 
 
 def make_gif(
-        cmd: str | list[str], 
-        output: str, 
-        /, 
-        width: int     = 80,
-        height: int    = 24, 
-        font: str      = "Consolas", 
-        font_size: int = 30, 
-        fps: int       = 60
-    ) -> None:
+    cmd: str | list[str],
+    output: str,
+    /,
+    width: int = 80,
+    height: int = 24,
+    font: str = "Consolas",
+    font_size: int = 30,
+    fps: int = 60,
+) -> None:
     # Build finally command.
     command: str = ""
     if isinstance(cmd, str):
@@ -56,8 +56,8 @@ def make_gif(
     from .convert import convert_cast_to_gif
     from .record_win import record_with_winpty
     import tempfile
+
     # Crerate temp file for .cast file
     with tempfile.TemporaryFile("w", encoding="utf-8") as f:
         record_with_winpty([command], f.name, width, height)
         convert_cast_to_gif(f.name, output, font, font_size, fps)
-    

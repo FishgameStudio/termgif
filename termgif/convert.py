@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """termgif.convert
 
 Convert a cast JSON (as produced by record_win.py) to a GIF.
@@ -6,6 +5,9 @@ Convert a cast JSON (as produced by record_win.py) to a GIF.
 Usage:
   python convert.py session.cast demo.gif --fps 12 --font-size 14
 """
+# pyright: reportUnusedCallResult=false, reportExplicitAny=false 
+# pyright: reportAny=false, reportUnknownVariableType=false
+# pyright: reportUnknownArgumentType=false
 
 from __future__ import annotations
 
@@ -15,18 +17,20 @@ import logging
 import os
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, List, Optional, Sequence, Tuple
-
+from typing import Any, cast as _typing_cast
+from collections.abc import Sequence
 import pyte
 from PIL import Image, ImageChops, ImageDraw, ImageFont
+CURDIR: str = os.path.dirname(__file__)
+
 
 logger = logging.getLogger("termgif.convert")
 logger.addHandler(logging.NullHandler())
 
-DEFAULT_FONTS: List[str] = [
-    "assets/DejaVuSansMono.ttf",
+DEFAULT_FONTS: list[str] = [
+    f"{CURDIR}/assets/DejaVuSansMono.ttf",
     "C:\\Windows\\Fonts\\Consola.ttf",
-    "C:\\Windows\\Fonts\\DejaVuSansMono.ttf",
+    "C:\\Windows\\Fonts\\vgasyst.fon",
     "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf",
     "/Library/Fonts/Andale Mono.ttf",
 ]
@@ -38,26 +42,31 @@ class Frame:
     duration_ms: int
 
 
-def _char_size(font: ImageFont.ImageFont) -> Tuple[int, int]:
+def _char_size(font: ImageFont.ImageFont) -> tuple[int, int]:
     """Return (char_width, char_height) for monospace font."""
-    try:
-        bbox = font.getbbox("M")
-        cw = bbox[2] - bbox[0]
-        ch = bbox[3] - bbox[1]
-        if cw > 0 and ch > 0:
-            return cw, ch
-    except Exception:
-        pass
+    #try:
+    bbox: tuple[int, int, int, int] = font.getbbox("M")
+    cw: int = bbox[2] - bbox[0]
+    ch: int = bbox[3] - bbox[1]
+    print(f"cw: {cw}, ch: {ch}")
+    if cw > 0 and ch > 0:
+        return cw, ch
+    #except Exception as e:
+    #    print(f"Exception: {e}, pass")
+    #    pass
 
     # Fallback; different Pillow versions expose different APIs
     try:
-        w, h = font.getsize("M")  # type: ignore[attr-defined]
-        return int(w), int(h)
+        # font.getsize is deprecated
+        left, top, right, bottom = font.getbbox("M")
+        w: int = right - left
+        h: int = bottom - top
+        return w, h
     except Exception:
         return 8, 16
 
 
-def choose_font(font_path: Optional[str], size: int) -> ImageFont.ImageFont:
+def choose_font(font_path: str | None, size: int) -> ImageFont.FreeTypeFont | ImageFont.ImageFont:
     if font_path:
         try:
             return ImageFont.truetype(font_path, size)
@@ -92,7 +101,7 @@ def _screen_line(screen: pyte.Screen, row: int) -> str:
         except Exception:
             return ""
 
-    out: List[str] = []
+    out: list[str] = []
     for cell in row_buf:
         if isinstance(cell, str):
             out.append(cell)
@@ -104,8 +113,8 @@ def _screen_line(screen: pyte.Screen, row: int) -> str:
 def render_screen_to_image(
     screen: pyte.Screen,
     font: ImageFont.ImageFont,
-    fg: Tuple[int, int, int] = (255, 255, 255),
-    bg: Tuple[int, int, int] = (0, 0, 0),
+    fg: tuple[int, int, int] = (255, 255, 255),
+    bg: tuple[int, int, int] = (0, 0, 0),
 ) -> Image.Image:
     cw, ch = _char_size(font)
     width_px = screen.columns * cw
@@ -116,7 +125,7 @@ def render_screen_to_image(
 
     for r in range(screen.lines):
         line = _screen_line(screen, r)
-        draw.text((0, r * ch), line, font=font, fill=fg)
+        draw.text(xy=(0, r * ch), text=line, font=font, fill=fg)
 
     return img
 
@@ -131,27 +140,27 @@ def _images_equal(a: Image.Image, b: Image.Image) -> bool:
 def convert_cast_to_gif(
     cast_path: str | Path,
     out_gif: str | Path,
-    font_path: Optional[str] = None,
+    font_path: str | None = None,
     font_size: int = 14,
     fps: int = 12,
     dedupe_identical_frames: bool = False,
     min_frame_ms: int = 80,
 ) -> None:
-    cast_file = Path(cast_path)
+    cast_file: Path = Path(cast_path)
     if not cast_file.exists():
         raise FileNotFoundError(f"Cast file not found: {cast_file}")
 
     with cast_file.open("r", encoding="utf-8") as f:
-        cast = json.load(f)
+        cast: dict[str, Any] = json.load(f)
 
     cols = int(cast.get("width", 80))
     lines = int(cast.get("height", 24))
-    events: List[Any] = cast.get("events", [])
+    events: list[Any] = cast.get("events", [])
 
-    screen = pyte.Screen(cols, lines)
-    stream = pyte.Stream(screen)
-    font = choose_font(font_path, font_size)
-
+    screen: pyte.Screen = pyte.Screen(cols, lines)
+    stream: pyte.Stream = pyte.Stream(screen)
+    font: ImageFont.ImageFont = _typing_cast(ImageFont.ImageFont, choose_font(font_path, font_size)
+)    
     # Ensure stable ordering
     def _key(e: Any) -> float:
         try:
@@ -161,23 +170,23 @@ def convert_cast_to_gif(
 
     events = sorted(events, key=_key)
 
-    frames: List[Frame] = []
+    frames: list[Frame] = []
     last_t: float = 0.0
-    last_img_rgb: Optional[Image.Image] = None
+    last_img_rgb: Image.Image | None = None
 
     if not events:
         img = render_screen_to_image(screen, font)
-        frames.append(Frame(image=img.convert("P", palette=Image.ADAPTIVE), duration_ms=max(1, int(1000 / fps))))
+        frames.append(Frame(image=img.convert("P", palette=Image.Palette.ADAPTIVE), duration_ms=max(1, int(1000 / fps))))
     else:
-        for idx, ev in enumerate(events):
+        for ev in events:
 
             if not isinstance(ev, (list, tuple)) or len(ev) < 2:
                 continue
 
-            t_raw, data = ev[0], ev[1]
+            t_raw: Any = ev[0]
+            data:  str = ev[1]
 
-
-
+            t: float
             try:
                 t = float(t_raw)
             except Exception:
@@ -189,8 +198,8 @@ def convert_cast_to_gif(
                 # If pyte can't parse some escape sequences, keep going
                 continue
 
-            img_rgb = render_screen_to_image(screen, font)
-
+            img_rgb: Image.Image = render_screen_to_image(screen, font)
+            duration_ms: int
             if last_t == 0.0:
                 duration_ms = max(1, int(1000 / fps))
             else:
@@ -198,8 +207,6 @@ def convert_cast_to_gif(
             last_t = t
 
             if dedupe_identical_frames and last_img_rgb is not None:
-
-
                 try:
                     if _images_equal(img_rgb, last_img_rgb) and frames:
                         frames[-1].duration_ms += duration_ms
@@ -208,7 +215,7 @@ def convert_cast_to_gif(
                     pass
 
             duration_ms = max(duration_ms, min_frame_ms)
-            frames.append(Frame(image=img_rgb.convert("P", palette=Image.ADAPTIVE), duration_ms=duration_ms))
+            frames.append(Frame(image=img_rgb.convert("P", palette=Image.Palette.ADAPTIVE), duration_ms=duration_ms))
             last_img_rgb = img_rgb
 
     if not frames:
@@ -230,12 +237,12 @@ def convert_cast_to_gif(
         disposal=2,
     )
 
-    logger.info("Wrote GIF %s (%d frames)", out_path, len(frames))
+    logger.info("Wrote GIF %s (%d frames)" % (out_path, len(frames)))
 
 
 
 
-def _parse_args(argv: Optional[Sequence[str]] = None) -> argparse.Namespace:
+def _parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
     p = argparse.ArgumentParser(prog="convert", description="Convert cast JSON to GIF")
     p.add_argument("infile", help="Input cast JSON path")
     p.add_argument("outfile", help="Output GIF path")
@@ -246,10 +253,9 @@ def _parse_args(argv: Optional[Sequence[str]] = None) -> argparse.Namespace:
     return p.parse_args(argv)
 
 
-def main(argv: Optional[Sequence[str]] = None) -> int:
-    args = _parse_args(argv)
+def main(argv: Sequence[str] | None = None) -> int:
+    args: argparse.Namespace = _parse_args(argv)
     logging.basicConfig(level=logging.DEBUG if args.debug else logging.INFO, format="%(levelname)s: %(message)s")
-
     convert_cast_to_gif(
         args.infile,
         args.outfile,

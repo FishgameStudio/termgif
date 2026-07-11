@@ -28,7 +28,7 @@ logger = logging.getLogger("termgif.convert")
 logger.addHandler(logging.NullHandler())
 
 DEFAULT_FONTS: list[str] = [
-    f"{CURDIR}/assets/DejaVuSansMono.ttf",
+    f"{CURDIR}/assets/UbuntuMono-r.ttf",
     "C:\\Windows\\Fonts\\Consola.ttf",
     "C:\\Windows\\Fonts\\vgasyst.fon",
     "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf",

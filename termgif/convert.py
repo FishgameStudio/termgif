@@ -5,7 +5,8 @@ Convert a cast JSON (as produced by record_win.py) to a GIF.
 Usage:
   python convert.py session.cast demo.gif --fps 12 --font-size 14
 """
-# pyright: reportUnusedCallResult=false, reportExplicitAny=false 
+
+# pyright: reportUnusedCallResult=false, reportExplicitAny=false
 # pyright: reportAny=false, reportUnknownVariableType=false
 # pyright: reportUnknownArgumentType=false
 
@@ -21,6 +22,7 @@ from typing import Any, cast as _typing_cast
 from collections.abc import Sequence
 import pyte
 from PIL import Image, ImageChops, ImageDraw, ImageFont
+
 CURDIR: str = os.path.dirname(__file__)
 
 
@@ -44,14 +46,14 @@ class Frame:
 
 def _char_size(font: ImageFont.ImageFont) -> tuple[int, int]:
     """Return (char_width, char_height) for monospace font."""
-    #try:
+    # try:
     bbox: tuple[int, int, int, int] = font.getbbox("M")
     cw: int = bbox[2] - bbox[0]
     ch: int = bbox[3] - bbox[1]
     print(f"cw: {cw}, ch: {ch}")
     if cw > 0 and ch > 0:
         return cw, ch
-    #except Exception as e:
+    # except Exception as e:
     #    print(f"Exception: {e}, pass")
     #    pass
 
@@ -159,8 +161,8 @@ def convert_cast_to_gif(
 
     screen: pyte.Screen = pyte.Screen(cols, lines)
     stream: pyte.Stream = pyte.Stream(screen)
-    font: ImageFont.ImageFont = _typing_cast(ImageFont.ImageFont, choose_font(font_path, font_size)
-)    
+    font: ImageFont.ImageFont = _typing_cast(ImageFont.ImageFont, choose_font(font_path, font_size))
+
     # Ensure stable ordering
     def _key(e: Any) -> float:
         try:
@@ -176,7 +178,9 @@ def convert_cast_to_gif(
 
     if not events:
         img = render_screen_to_image(screen, font)
-        frames.append(Frame(image=img.convert("P", palette=Image.Palette.ADAPTIVE), duration_ms=max(1, int(1000 / fps))))
+        frames.append(
+            Frame(image=img.convert("P", palette=Image.Palette.ADAPTIVE), duration_ms=max(1, int(1000 / fps)))
+        )
     else:
         for ev in events:
 
@@ -184,7 +188,7 @@ def convert_cast_to_gif(
                 continue
 
             t_raw: Any = ev[0]
-            data:  str = ev[1]
+            data: str = ev[1]
 
             t: float
             try:
@@ -240,8 +244,6 @@ def convert_cast_to_gif(
     logger.info("Wrote GIF %s (%d frames)" % (out_path, len(frames)))
 
 
-
-
 def _parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
     p = argparse.ArgumentParser(prog="convert", description="Convert cast JSON to GIF")
     p.add_argument("infile", help="Input cast JSON path")
@@ -268,4 +270,3 @@ def main(argv: Sequence[str] | None = None) -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

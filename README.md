@@ -8,6 +8,15 @@
 *** Thanks again! Now go create something AMAZING! :D
 -->
 
+
+<!-- PROJECT LOGO -->
+<br />
+<div align="center">
+  <a href="https://github.com/FishgameStudio/termgif">
+    <img src="assets/logo.png" alt="Logo">
+  </a>
+
+# termgif
 <!-- PROJECT SHIELDS -->
 <!--
 *** I'm using markdown "reference style" links for readability.
@@ -30,28 +39,17 @@
 ![Version](https://img.shields.io/badge/version-0.1.0-orange)
 [![License](https://img.shields.io/github/license/FishgameStudio/termgif)](LICENSE)
 
-
-
-<!-- PROJECT LOGO -->
-<br />
-<div align="center">
-  <a href="https://github.com/FishgameStudio/termgif">
-    <img src="assets/logo.png" alt="Logo" width="80" height="80">
-  </a>
-
-<h1 align="center">termgif</h1>
-
   <p align="center">
     A simple and lightweight static GIF generator!
     <br />
-    <a href="https://github.com/FishgameStudio/termgif"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/FishgameStudio/termgif/tree/main/docs"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/FishgameStudio/termgif">View Demo</a>
+    <a href="https://github.com/FishgameStudio/termgif/tree/main/examples">View Demo</a>
     &middot;
-    <a href="https://github.com/FishgameStudio/termgif/issues/new?labels=bug&template=bug-report---.md">Report Bug</a>
+    <a href="https://github.com/FishgameStudio/termgif/issues/new?labels=bug">Report Bug</a>
     &middot;
-    <a href="https://github.com/FishgameStudio/termgif/issues/new?labels=enhancement&template=feature-request---.md">Request Feature</a>
+    <a href="https://github.com/FishgameStudio/termgif/issues/new?labels=enhancement">Request Feature</a>
   </p>
 </div>
 
@@ -89,7 +87,7 @@
 ## About The Project
 
 
-> ***Creating clean, visually appealing demo screenshots for command-line tutorials can often be a tedious hassle—working with asciinema and ffmpeg involves a convoluted workflow. In reality, however, simply feeding it an API will resolve all such issues.***
+> ***"Creating clean, visually appealing demo screenshots for command-line tutorials can often be a tedious hassle—working with asciinema and ffmpeg involves a convoluted workflow. In reality, however, simply feeding it an API will resolve all such issues."***
 
 **termgif** is a lightweight tool for static-build GIF generation. On Windows it records your terminal command execution (producing a cast JSON), then renders the captured output into an animated GIF.
 
@@ -168,10 +166,9 @@ _For more examples, please refer to the [Documentation](docs) or [Examples](exam
 <!-- ROADMAP -->
 ## Roadmap
 
-- [ ] Feature 1
-- [ ] Feature 2
-- [ ] Feature 3
-    - [ ] Nested Feature
+- [ ] Support for macOS and Linux
+- [ ] Support for recording live inputting text on console (`stdin`)
+- [ ] Support recording live console
 
 See the [open issues](https://github.com/FishgameStudio/termgif/issues) for a full list of proposed features (and known issues).
 

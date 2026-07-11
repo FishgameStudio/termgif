@@ -16,13 +16,15 @@ import argparse
 import json
 import logging
 import os
+from collections.abc import Sequence
 from dataclasses import dataclass
 from pathlib import Path
-from pyte.screens import Char, StaticDefaultDict
-from typing import Any, cast as _typing_cast
-from collections.abc import Sequence
+from typing import Any
+from typing import cast as _typing_cast
+
 import pyte
 from PIL import Image, ImageChops, ImageDraw, ImageFont
+from pyte.screens import Char, StaticDefaultDict
 
 CURDIR: str = os.path.dirname(__file__)
 
@@ -184,7 +186,6 @@ def convert_cast_to_gif(
         )
     else:
         for ev in events:
-
             if not isinstance(ev, (list, tuple)) or len(ev) < 2:
                 continue
 

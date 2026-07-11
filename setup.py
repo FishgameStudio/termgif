@@ -16,7 +16,7 @@ _ = setup(
     license="MIT",
     python_requires=">=3.10",
     packages=find_packages("termgif"),
-    package_dir={"": "termgif"},
+    package_dir={"termgif": "termgif"},
     package_data={
         "ohmygui": [
             "termgif/assets/*", "assets/*"
@@ -36,7 +36,7 @@ _ = setup(
     install_requires=[
         "pyte>=0.8.2",
         "pillow>=12.3.0", 
-        "winpty>=3.0.0"
+        "pywinpty>=3.0.0"
     ],
     extras_require={
         "dev": [

@@ -87,4 +87,4 @@ package-dir = {"" = "termgif"}
 include-package-data = true
 
 [tool.setuptools.package-data]
-"termgif" = ["termgif/assets/*"]
+"termgif" = ["termgif/assets/*", "assets/*"]

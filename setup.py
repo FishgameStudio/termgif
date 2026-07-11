@@ -19,7 +19,7 @@ _ = setup(
     package_dir={"": "termgif"},
     package_data={
         "ohmygui": [
-            "termgif/assets/*",
+            "termgif/assets/*", "assets/*"
         ]
     },
     keywords=["termgif", "gif", "generator", "terminal"],

@@ -1,5 +1,5 @@
 """
-Simple Windows recorder using pywinpty.
+Simple Windows recorder using winpty.
 Usage examples (cmd):
   python record_win.py -o session.cast -- cmd /c "echo hi & timeout /t 1"
 PowerShell:
@@ -10,11 +10,11 @@ import argparse
 import json
 import time
 
-def record_with_pywinpty(cmdlist: list[str], out_path: str, width: int =80, height: int =24):
-    import winpty as pywinpty
-    # Build command line string for spawn (pywinpty expects a commandline string)
+def record_with_winpty(cmdlist: list[str], out_path: str, width: int =80, height: int =24):
+    import winpty
+    # Build command line string for spawn (winpty expects a commandline string)
     cmdline: str = " ".join(cmdlist)
-    p: pywinpty.ptyprocess.PtyProcess = pywinpty.PtyProcess.spawn(argv=cmdline)
+    p: winpty.ptyprocess.PtyProcess = winpty.PtyProcess.spawn(argv=cmdline)
     events: list[list[float | str]] = []
     start = time.time()
     try:
@@ -25,7 +25,7 @@ def record_with_pywinpty(cmdlist: list[str], out_path: str, width: int =80, heig
                 break
             if not data:
                 break
-            # pywinpty returns str on Python3; ensure str
+            # winpty returns str on Python3; ensure str
             if isinstance(data, bytes):
                 data = data.decode("utf-8", "replace")
             events.append([time.time() - start, data])
@@ -49,7 +49,7 @@ def main():
     if not args.cmd:
         parser.error("Missing command. Example: python record_win.py -o session.cast -- cmd /c \"echo hi\"")
     # args.cmd is list; keep as-is (works if user supplies full tokens)
-    record_with_pywinpty(args.cmd, args.out, width=args.width, height=args.height)
+    record_with_winpty(args.cmd, args.out, width=args.width, height=args.height)
 
 if __name__ == "__main__":
     main()

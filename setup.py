@@ -8,7 +8,7 @@ _ = setup(
     name="termgif",
     version="0.1.0",
     author="Fishgame Studio",
-    author_email="yourmail@example.com",
+    author_email="popxh@outlook.com",
     description="Lightweight GUI framework written in Python",
     long_description=README,
     long_description_content_type="text/markdown",
@@ -22,16 +22,18 @@ _ = setup(
             "termgif/assets/*", "assets/*"
         ]
     },
-    keywords=["termgif", "gif", "generator", "terminal"],
+    keywords=["term2gif", "termgif", "gif", "gif-generator", "terminal"],
     classifiers=[
         "Programming Language :: Python :: 3.12",
-    "Programming Language :: Python :: 3.13",
-    "Programming Language :: Python :: 3.14",
-    "Operating System :: Microsoft :: Windows",
-    "Operating System :: POSIX :: Linux",
-    "Operating System :: MacOS",
-    "License :: OSI Approved :: MIT License",
-    "Topic :: GIF Generator :: Static gif generator"
+        "Programming Language :: Python :: 3.13",
+        "Programming Language :: Python :: 3.14",
+        "Operating System :: Microsoft :: Windows",
+        "Operating System :: POSIX :: Linux",
+        "Operating System :: MacOS",
+        "License :: OSI Approved :: MIT License",
+        "Topic :: Multimedia :: Graphics",
+        "Topic :: Multimedia :: Graphics :: Capture",
+        "Topic :: Utilities",
     ],
     install_requires=[
         "pyte>=0.8.2",

@@ -165,10 +165,11 @@ _For more examples, please refer to the [Documentation](docs) or [Examples](exam
 
 <!-- ROADMAP -->
 ## Roadmap
-
-- [ ] Support for macOS and Linux
-- [ ] Support for recording live inputting text on console (`stdin`)
-- [ ] Support recording live console
+- [x] **v0.1.0**: Basic recording for Windows
+- [ ] **v0.2.0**:
+    - [ ] Support for macOS and Linux
+    - [ ] Support for recording live inputting text on console (`stdin`)
+    - [ ] Support recording live console (with echo and color)
 
 See the [open issues](https://github.com/FishgameStudio/termgif/issues) for a full list of proposed features (and known issues).
 

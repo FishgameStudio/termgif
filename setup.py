@@ -1,4 +1,5 @@
 from pathlib import Path
+
 from setuptools import find_packages, setup
 
 BASE_DIR = Path(__file__).parent
@@ -37,7 +38,7 @@ _ = setup(
     ],
     install_requires=[
         "pyte>=0.8.2",
-        "pillow>=12.3.0", 
+        "pillow>=12.3.0",
         "pywinpty>=3.0.0"
     ],
     extras_require={

@@ -1,8 +1,9 @@
 # Example to call the APIs.
 
-import termgif
 import os
 import subprocess as sp
+
+import termgif
 
 GIF_PATH: str = f"{os.path.dirname(__file__)}/dist.gif"
 termgif.make_gif(

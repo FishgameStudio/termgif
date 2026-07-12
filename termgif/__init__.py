@@ -21,16 +21,16 @@
 # SOFTWARE.
 
 
-from .wrap import make_gif
-from .convert import convert_cast_to_gif, choose_font, render_screen_to_image
+from .convert import choose_font, convert_cast_to_gif, render_screen_to_image
 from .record_win import record_with_winpty
+from .wrap import make_gif
 
 __version__ = "0.1.0"
 __author__ = "FishgameStudio"
 __all__ = [
-    "make_gif", 
-    "convert_cast_to_gif", 
-    "choose_font", 
-    "render_screen_to_image", 
+    "make_gif",
+    "convert_cast_to_gif",
+    "choose_font",
+    "render_screen_to_image",
     "record_with_winpty",
 ]

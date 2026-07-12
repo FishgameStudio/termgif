@@ -8,6 +8,7 @@ PowerShell:
 
 # pyright: reportMissingTypeStubs=false, reportUnknownMemberType=false, reportAny=false
 import argparse
+import contextlib
 import json
 import time
 
@@ -33,10 +34,8 @@ def record_with_winpty(cmdlist: list[str], out_path: str, width: int = 80, heigh
                 data = data.decode("utf-8", "replace")
             events.append([time.time() - start, data])
     finally:
-        try:
+        with contextlib.suppress(Exception):
             _ = p.wait()
-        except Exception:
-            pass
     cast = {"version": 2, "width": width, "height": height, "events": events}
     with open(out_path, "w", encoding="utf-8") as f:
         json.dump(cast, f, ensure_ascii=False)

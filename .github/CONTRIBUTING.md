@@ -38,10 +38,12 @@ Types of emoji:
 * 🔒 `:lock:` **security**: Security fixes
 * 🌐 `:globe_with_meridians:` **i18n**: Internationalization
 * 🎨 `:art:` **style**: Change code style
+* 🚚 `:trunk:` **trunk**: Move or rename files
+* 🔀 `:twisted_rightwards_arrows:` **merge**: Merge branches
 
 
 Examples:
-```plaintext
+```
 ✨ feat: new function
 🐛 fix: bug repair
 📚 docs: document update

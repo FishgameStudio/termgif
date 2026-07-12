@@ -34,7 +34,7 @@ def make_gif(
     cmd: str | list[str],
     output: str,
     /,
-    win_name: str | list[str] | None
+    win_name: str | list[str] | None = None
 ) -> None:
     # Build command list.
     cmdlist: list[str] = cmd if isinstance(cmd, list) else cmd.split(" ")

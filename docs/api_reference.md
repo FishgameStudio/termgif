@@ -30,7 +30,7 @@ Record a Windows native console window executing the specified command and save 
 - Returns: `None` (GIF file saved directly to the specified path).
 
 ---
-### `def make_gif(cmd: str | list[str], output: str, /, win_name: str | list[str] | None) -> None`
+### `def make_gif(cmd: str | list[str], output: str, /, win_name: str | list[str] | None = None) -> None`
 Launch a Windows native console, record the command interaction, and export as an animated GIF file.
 - `cmd`: Command string or token list to run in the Windows native console.
 - `output`: Output path of the final GIF file.

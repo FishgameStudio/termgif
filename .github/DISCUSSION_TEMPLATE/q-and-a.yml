@@ -1,0 +1,49 @@
+name: "Q&A Help"
+description: "Ask usage questions, get help with termgif"
+title: "[Q&A] "
+labels: ["question"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        # Termgif Usage Question
+        Please fill out the following details so we can help you quickly!
+  - type: input
+    id: termgif_version
+    attributes:
+      label: termgif version
+      placeholder: e.g. 0.1.0
+    validations:
+      required: true
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating System
+      options:
+        - Windows
+        - macOS
+        - Linux
+        - Other
+    validations:
+      required: true
+  - type: input
+    id: python_version
+    attributes:
+      label: Python version
+      placeholder: e.g. Python 3.12
+  - type: textarea
+    id: problem
+    attributes:
+      label: Your question / problem
+      placeholder: Describe what you are trying to do and what error/issue you see
+    validations:
+      required: true
+  - type: textarea
+    id: code
+    attributes:
+      label: Minimal code / command snippet
+      placeholder: Paste your code or terminal command here
+  - type: textarea
+    id: tried
+    attributes:
+      label: What have you already tried?

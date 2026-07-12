@@ -1,0 +1,16 @@
+name: "General Discussion"
+description: "General chat, community talk, announcements"
+title: "[General] "
+labels: ["discussion"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        # General Community Discussion
+        Please follow our Code of Conduct and keep discussions friendly and constructive!
+  - type: textarea
+    id: content
+    attributes:
+      label: Discussion content
+    validations:
+      required: true

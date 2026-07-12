@@ -1,0 +1,26 @@
+name: "Ideas & Improvements"
+description: "Discuss new features, improvements and roadmap ideas"
+title: "[Idea] "
+labels: ["idea"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        # New Idea / Improvement Discussion
+        Share your suggestions for termgif!
+  - type: textarea
+    id: motivation
+    attributes:
+      label: What problem / scenario does this solve?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: How would you like it to work? API / parameters / behavior
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      id: references
+      label: References / examples / screenshots

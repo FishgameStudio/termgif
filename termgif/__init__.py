@@ -22,7 +22,15 @@
 
 
 from .wrap import make_gif
+from .convert import convert_cast_to_gif, choose_font, render_screen_to_image
+from .record_win import record_with_winpty
 
 __version__ = "0.1.0"
 __author__ = "FishgameStudio"
-__all__ = ["make_gif"]
+__all__ = [
+    "make_gif", 
+    "convert_cast_to_gif", 
+    "choose_font", 
+    "render_screen_to_image", 
+    "record_with_winpty",
+]

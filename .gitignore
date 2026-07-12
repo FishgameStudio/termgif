@@ -216,3 +216,7 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Generated GIF file
+*.gif
+!assets/screenshot.gif

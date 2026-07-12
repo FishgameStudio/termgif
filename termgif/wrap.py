@@ -53,12 +53,23 @@ def make_gif(
         command = cmd
     else:
         command = " ".join(cmd)
-    import tempfile
+    import tempfile, os
 
     from .convert import convert_cast_to_gif
     from .record_win import record_with_winpty
 
     # Crerate temp file for .cast file
-    with tempfile.TemporaryFile("w", encoding="utf-8") as f:
-        record_with_winpty([command], f.name, width, height)
-        convert_cast_to_gif(f.name, output, font, font_size, fps)
+    with tempfile.NamedTemporaryFile(
+        mode="w",
+        encoding="utf-8",
+        suffix=".cast",
+        delete=False   # Critical: do NOT auto-delete on close
+    ) as f:
+        try:
+            record_with_winpty([command], f.name, width, height)
+            convert_cast_to_gif(f.name, output, font, font_size, fps)
+        finally:
+            try:
+                os.unlink(f.name)
+            except (OSError, FileNotFoundError):
+                pass

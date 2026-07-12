@@ -1,71 +1,76 @@
 """
-Simple Windows recorder using winpty.
-Usage examples (cmd):
-  python record_win.py -o session.cast -- cmd /c "echo hi & timeout /t 1"
-PowerShell:
-  python record_win.py -o session.cast -- powershell -Command "for ($i=0;$i -lt 5;$i++){Write-Output \"line $i\"; Start-Sleep -Milliseconds 200}"
+Simple Windows console pixel recorder, output GIF directly.
+Usage Examples::
+    
+    record_window(['echo', 'hello, world!'], 'out.gif')
 """
 
 # pyright: reportMissingTypeStubs=false, reportUnknownMemberType=false, reportAny=false
-import argparse, json, time, sys, ctypes, contextlib
+# pyright: reportUnusedCallResult=false, reportUnknownVariableType=false
+import time
+import sys
+import mss
+import pygetwindow
+from PIL import Image
+import subprocess
+from typing import cast
 
-def _get_console_encoding() -> str:
+
+def record_window(cmdlist: list[str], out_path: str) -> None:
     if sys.platform != "win32":
-        return "utf-8"
+        raise NotImplementedError("Only supports Windows platform")
+
+    cmd: str = " ".join(cmdlist)
+    # Launch target command in new console
+    proc: subprocess.Popen[bytes] = subprocess.Popen(
+        cmd,
+        creationflags=subprocess.CREATE_NEW_CONSOLE,
+        shell=True
+    )
+    time.sleep(0.3)
+
+    # Find new console window (match cmd/powershell roughly)
+    all_wins: list[pygetwindow.Win32Window] = cast(list[pygetwindow.Win32Window], pygetwindow.getAllWindows())
+    console_win: pygetwindow.Win32Window | None = None
+    for w in all_wins:
+        if w.title and ("cmd" in w.title or "PowerShell" in w.title):
+            console_win = w
+            break
+    if console_win is None:
+        proc.terminate()
+        raise RuntimeError("Cannot find target console window")
+
+    region: dict[str, float] = {
+        "top": console_win.top,
+        "left": console_win.left,
+        "width": console_win.width,
+        "height": console_win.height
+    }
+
+    frames: list[Image.Image] = []
+    fps = 10
+    frame_delay: float = 1 / fps
+    print(f"Recording console window, Ctrl+C to stop and save GIF: {out_path}")
     try:
-        codepage = ctypes.cdll.kernel32.GetConsoleOutputCP()
-        if codepage == 936:
-            return "gbk"
-        elif codepage == 65001:
-            return "utf-8"
-        return f"cp{codepage}"
-    except Exception:
-        return "gbk"
-
-def record_with_winpty(cmdlist: list[str], out_path: str, width: int = 80, height: int = 24) -> None:
-    import winpty
-    # TODO: Support other platforms.
-    if sys.platform != "win32":
-        raise NotImplementedError("winpty recording only supports Windows platform in v0.1.0")
-
-    # Build command line string for spawn (winpty expects a commandline string)
-    cmdline: str = " ".join(cmdlist)
-    p: winpty.ptyprocess.PtyProcess = winpty.PtyProcess.spawn(argv=cmdline)
-    events: list[list[float | str]] = []
-    start = time.time()
-    try:
-        while True:
-            try:
-                data = p.read(1024)
-            except EOFError:
-                break
-            if not data:
-                break
-            # winpty returns str on Python3; ensure str
-            if isinstance(data, bytes):
-                data = data.decode(_get_console_encoding(), "replace")
-            events.append([time.time() - start, data])
-    finally:
-        with contextlib.suppress(Exception):
-            _ = p.wait()
-    cast = {"version": 2, "width": width, "height": height, "events": events}
-    with open(out_path, "w", encoding="utf-8") as f:
-        json.dump(cast, f, ensure_ascii=False)
-    print(f"Recorded {len(events)} events -> {out_path}")
-
-
-def main() -> None:
-    parser = argparse.ArgumentParser()
-    _ = parser.add_argument("-o", "--out", required=True, help="Output cast file (JSON)")
-    _ = parser.add_argument("--width", type=int, default=80)
-    _ = parser.add_argument("--height", type=int, default=24)
-    _ = parser.add_argument("cmd", nargs=argparse.REMAINDER, help="Command to run (after --)")
-    args: argparse.Namespace = parser.parse_args()
-    if not args.cmd:
-        parser.error('Missing command. Example: python record_win.py -o session.cast -- cmd /c "echo hi"')
-    # args.cmd is list; keep as-is (works if user supplies full tokens)
-    record_with_winpty(args.cmd, args.out, width=args.width, height=args.height)
-
-
-if __name__ == "__main__":
-    main()
+        with mss.mss() as sct:
+            sct: mss.MSS = cast(mss.MSS, sct)
+            while True:
+                sshot: mss.ScreenShot = sct.grab(region)
+                img: Image.Image = Image.frombytes("RGB", sshot.size, sshot.rgb)
+                frames.append(img)
+                time.sleep(frame_delay)
+    except KeyboardInterrupt:
+        proc.terminate()
+        proc.wait()
+        if frames:
+            frames[0].save(
+                out_path,
+                save_all=True,
+                append_images=frames[1:],
+                duration=int(frame_delay * 1000),
+                loop=0,
+                optimize=True
+            )
+            print(f"Saved GIF to {out_path}, total frames: {len(frames)}")
+        else:
+            print("No frames recorded")

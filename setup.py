@@ -5,7 +5,7 @@ BASE_DIR = Path(__file__).parent
 README = (BASE_DIR / "README.md").read_text(encoding="utf-8")
 
 _ = setup(
-    name="termgif",
+    name="term2gif",
     version="0.1.0",
     author="Fishgame Studio",
     author_email="popxh@outlook.com",

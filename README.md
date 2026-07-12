@@ -57,34 +57,34 @@
 
 <!-- TABLE OF CONTENTS -->
 <details>
-  <summary>Table of Contents</summary>
+  <summary>📖 Table of Contents</summary>
   <ol>
     <li>
-      <a href="#about-the-project">About The Project</a>
+      <a href="#about-the-project">🔹 About The Project</a>
       <ul>
-        <li><a href="#built-with">Built With</a></li>
+        <li><a href="#built-with">🔹 Built With</a></li>
       </ul>
     </li>
     <li>
-      <a href="#getting-started">Getting Started</a>
+      <a href="#getting-started">🔹 Getting Started</a>
       <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
+        <li><a href="#prerequisites">🔹 Prerequisites</a></li>
+        <li><a href="#installation">🔹 Installation</a></li>
       </ul>
     </li>
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#contributing">Contributing</a></li>
-    <li><a href="#license">License</a></li>
-    <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
+    <li><a href="#usage">🔹 Usage</a></li>
+    <li><a href="#roadmap">🔹 Roadmap</a></li>
+    <li><a href="#contributing">🔹 Contributing</a></li>
+    <li><a href="#license">🔹 License</a></li>
+    <li><a href="#contact">🔹 Contact</a></li>
+    <li><a href="#acknowledgments">🔹 Acknowledgments</a></li>
   </ol>
 </details>
 
 
 
 <!-- ABOUT THE PROJECT -->
-## About The Project
+## 🎬 About The Project
 
 
 > ***"Creating clean, visually appealing demo screenshots for command-line tutorials can often be a tedious hassle—working with asciinema and ffmpeg involves a convoluted workflow. In reality, however, simply feeding it an API will resolve all such issues."***
@@ -95,15 +95,15 @@ The goal is simple: make command-line demos more visual and lightweight.
 
 Main flow:
 
-1. **Record**: run the target command and capture terminal output (record_win.py)
-2. **Convert**: render the cast JSON into GIF frames (convert_cast_to_gif / convert.py)
-3. **Generate**: write the GIF to the specified output path
+1. 🎥 **Record**: run the target command and capture terminal output (record_win.py)
+2. 🔄 **Convert**: render the cast JSON into GIF frames (convert_cast_to_gif / convert.py)
+3. 🧩 **Generate**: write the GIF to the specified output path
 
 <p align="right"><a href="#readme-top">🔝back to top</a></p>
 
 
 
-### Built With
+### 🛠️ Built With
 
 * [![Python3.14](https://img.shields.io/badge/python-3.14-3776AB?logo=python&logoColor=white&style=for-the-badge)](https://python.org)
 * [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json&style=for-the-badge)](https://docs.astral.sh/ruff)
@@ -116,12 +116,12 @@ Main flow:
 
 
 <!-- GETTING STARTED -->
-## Getting Started
+## 🚀 Getting Started
 
 This is an example of how you may give instructions on setting up your project locally.
 To get a local copy up and running follow these simple example steps.
 
-### Prerequisites
+### ✅ Prerequisites
 
 This is an example of how to list things you need to use the software and how to install them.
 * Hatch \(if exists\)
@@ -131,18 +131,19 @@ This is an example of how to list things you need to use the software and how to
   # print dependencies on group dep
   hatch dep show dev
   ```
+_See [pyproject.toml](pyproject.toml#L28) for complete content._
 
-### Installation
+### 📦 Installation
 
 1. Clone the repo
    ```sh
    git clone https://github.com/FishgameStudio/termgif.git
    ```
-3. Install PIP packages
+2. Install PIP packages
    ```sh
    pip install .
    ```
-5. Change git remote url to avoid accidental pushes to base project
+3. Change git remote url to avoid accidental pushes to base project
    ```sh
    git remote remove origin
    git remote -v # confirm the changes
@@ -153,9 +154,19 @@ This is an example of how to list things you need to use the software and how to
 
 
 <!-- USAGE EXAMPLES -->
-## Usage
+## 💡 Usage
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+```python
+import termgif
+import os
+import subprocess
+
+GIF_PATH: str = f"{os.path.dirname(__file__)}/dist.gif"
+termgif.make_gif(
+    'cmd /c "echo hello world!"', GIF_PATH, width=100, height=25, fps=90  # Specify the command to execute.
+)
+subprocess.run([GIF_PATH], shell=True)  # Open it with the default program.
+```
 
 _For more examples, please refer to the [Documentation](docs) or [Examples](examples)_
 
@@ -164,7 +175,7 @@ _For more examples, please refer to the [Documentation](docs) or [Examples](exam
 
 
 <!-- ROADMAP -->
-## Roadmap
+## 🗺️ Roadmap
 - [x] **v0.1.0**: Basic recording for Windows
 - [ ] **v0.2.0**:
     - [ ] Support for macOS and Linux
@@ -178,7 +189,7 @@ See the [open issues](https://github.com/FishgameStudio/termgif/issues) for a fu
 
 
 <!-- CONTRIBUTING -->
-## Contributing
+## 🤝 Contributing
 
 Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
@@ -193,7 +204,7 @@ Don't forget to give the project a star! Thanks again!
 
 <p align="right"><a href="#readme-top">🔝back to top</a></p>
 
-### Top contributors:
+### 🌟 Top contributors:
 
 <a href="https://github.com/FishgameStudio/termgif/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=FishgameStudio/termgif" alt="contrib.rocks image" />
@@ -202,7 +213,7 @@ Don't forget to give the project a star! Thanks again!
 
 
 <!-- LICENSE -->
-## License
+## 📃 License
 
 Distributed under the project_license. See `LICENSE` for more information.
 
@@ -211,7 +222,7 @@ Distributed under the project_license. See `LICENSE` for more information.
 
 
 <!-- CONTACT -->
-## Contact
+## 📬 Contact
 
 Nicola Grey - [popxh@outlook.com](mailto:popxh@outlook.com)
 
@@ -222,7 +233,7 @@ Project Link: [https://github.com/FishgameStudio/termgif](https://github.com/Fis
 
 
 <!-- ACKNOWLEDGMENTS -->
-## Acknowledgments
+## 🙏 Acknowledgments
 
 * [Best-README-Template](https://github.com/othneildrew/Best-README-Template)
 * [Pillow](https://github.com/python-pillow/Pillow)

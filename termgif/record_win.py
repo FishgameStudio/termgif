@@ -34,10 +34,11 @@ def record_window(cmdlist: list[str], out_path: str, /, window_titles: list[str]
     # Find new console window (match cmd/powershell roughly)
     all_wins: list[pygetwindow.Win32Window] = cast(list[pygetwindow.Win32Window], pygetwindow.getAllWindows())
     console_win: pygetwindow.Win32Window | None = None
+    print("Finding window...")
     for w in all_wins:
         if w.title:
             for title in window_titles:
-                if w.title in title:
+                if title in w.title:
                     console_win = w
                     break
     if console_win is None:

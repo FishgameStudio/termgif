@@ -48,11 +48,7 @@ def make_gif(
     fps: int = 60,
 ) -> None:
     # Build finally command.
-    command: str = ""
-    if isinstance(cmd, str):
-        command = cmd
-    else:
-        command = " ".join(cmd)
+    command: str = cmd if isinstance(cmd, str) else " ".join(cmd)
     import tempfile
 
     from .convert import convert_cast_to_gif

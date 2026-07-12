@@ -205,11 +205,7 @@ def convert_cast_to_gif(
                 continue
 
             img_rgb: Image.Image = render_screen_to_image(screen, font)
-            duration_ms: int
-            if last_t == 0.0:
-                duration_ms = max(1, int(1000 / fps))
-            else:
-                duration_ms = max(1, int((t - last_t) * 1000))
+            duration_ms: int = max(1, int(1000 / fps)) if last_t == 0.0 else max(1, int((t - last_t) * 1000))
             last_t = t
 
             if dedupe_identical_frames and last_img_rgb is not None:
@@ -243,7 +239,7 @@ def convert_cast_to_gif(
         disposal=2,
     )
 
-    logger.info("Wrote GIF %s (%d frames)" % (out_path, len(frames)))
+    logger.info(f"Wrote GIF {out_path} ({len(frames)} frames)")
 
 
 def _parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:

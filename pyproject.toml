@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "term2gif"
-version = "0.1.0"
+version = "0.1.1"
 authors = [
   { name = "Fishgame Studio", email = "popxh@outlook.com" }
 ]
@@ -26,9 +26,9 @@ classifiers = [
   "Topic :: Utilities",
 ]
 dependencies = [
-    "pyte>=0.8.2",
     "pillow>=12.3.0", 
-    "pywinpty>=3.0.0"
+    "PyGetWindow>=0.0.9", 
+    "mss>=10.2.0"
 ]
 
 [project.optional-dependencies]

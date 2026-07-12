@@ -31,12 +31,9 @@
 ![Issues](https://img.shields.io/github/issues/FishgameStudio/termgif)
 ![PRs](https://img.shields.io/github/issues-pr/FishgameStudio/termgif)
 [![CommitCount](https://badgen.net/github/commits/FishgameStudio/termgif/main)](https://github.com/FishgameStudio/termgif/commits/main)
-<!-- TODO: Unlock this after launched on PyPI:
 [![PyPI](https://img.shields.io/pypi/v/termgif?style=color=orange)](https://pypi.com/project/termgif)
--->
 ![Size](https://img.shields.io/github/repo-size/FishgameStudio/termgif)
 ![Welcome](https://img.shields.io/badge/PRs%20%26%20Issues-welcome-bluevoilet)
-![Version](https://img.shields.io/badge/version-0.1.0-orange)
 [![License](https://img.shields.io/github/license/FishgameStudio/termgif)](LICENSE)
 
   <p align="center">
@@ -93,11 +90,11 @@
 
 The goal is simple: make command-line demos more visual and lightweight.
 
-Main flow:
+**Main flow**:
 
-1. 🎥 **Record**: run the target command and capture terminal output (record_win.py)
-2. 🔄 **Convert**: render the cast JSON into GIF frames (convert_cast_to_gif / convert.py)
-3. 🧩 **Generate**: write the GIF to the specified output path
+1. 🎥 **Record**: Launch Windows native console process, locate the live console window, real-time pixel capture
+2. 🔄 **Process**: Collect continuous screen frames during command execution
+3. 🧩 **Generate**: Encode captured frames and export final animated GIF file directly
 
 <p align="right"><a href="#readme-top">🔝back to top</a></p>
 
@@ -135,19 +132,11 @@ _See [pyproject.toml](pyproject.toml#L28) for complete content._
 
 ### 📦 Installation
 
-1. Clone the repo
-   ```sh
-   git clone https://github.com/FishgameStudio/termgif.git
-   ```
-2. Install PIP packages
-   ```sh
-   pip install .
-   ```
-3. Change git remote url to avoid accidental pushes to base project
-   ```sh
-   git remote remove origin
-   git remote -v # confirm the changes
-   ```
+Install with PIP:
+```sh
+# Don't use termgif, it's registered; use term2gif instead.
+pip install term2gif
+```
 
 <p align="right"><a href="#readme-top">🔝back to top</a></p>
 
@@ -157,15 +146,17 @@ _See [pyproject.toml](pyproject.toml#L28) for complete content._
 ## 💡 Usage
 
 ```python
-import termgif
 import os
-import subprocess
+import subprocess as sp
+
+import termgif
 
 GIF_PATH: str = f"{os.path.dirname(__file__)}/dist.gif"
 termgif.make_gif(
-    'cmd /c "echo hello world!"', GIF_PATH, width=100, height=25, fps=90  # Specify the command to execute.
+    'cmd /c "echo hello world!"', GIF_PATH # Specify the command to execute.
 )
-subprocess.run([GIF_PATH], shell=True)  # Open it with the default program.
+_ = sp.run([GIF_PATH], shell=True)  # Open it with the default program.
+
 ```
 
 _For more examples, please refer to the [Documentation](docs) or [Examples](examples)_
@@ -179,8 +170,8 @@ _For more examples, please refer to the [Documentation](docs) or [Examples](exam
 - [x] **v0.1.0**: Basic recording for Windows
 - [ ] **v0.2.0**:
     - [ ] Support for macOS and Linux
-    - [ ] Support for recording live inputting text on console (`stdin`)
-    - [ ] Support recording live console (with echo and color)
+    - [x] Support for recording live inputting text on console (`stdin`)
+    - [x] Support recording live console (with echo and color)
 
 See the [open issues](https://github.com/FishgameStudio/termgif/issues) for a full list of proposed features (and known issues).
 
@@ -237,8 +228,7 @@ Project Link: [https://github.com/FishgameStudio/termgif](https://github.com/Fis
 
 * [Best-README-Template](https://github.com/othneildrew/Best-README-Template)
 * [Pillow](https://github.com/python-pillow/Pillow)
-* [pyte](https://github.com/selectel/pyte)
-* [winpty](https://github.com/rprichard/winpty)
-* [pywinpty](https://github.com/andfoy/pywinpty)
+* [PythonMSS](https://github.com/BoboTiG/python-mss)
+* [PyGetWindow](https://github.com/asweigart/pygetwindow)
 
 <p align="right"><a href="#readme-top">🔝back to top</a></p>

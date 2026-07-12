@@ -64,6 +64,7 @@ def record_window(cmdlist: list[str], out_path: str, /, window_titles: list[str]
                 frames.append(img)
                 time.sleep(frame_delay)
     except KeyboardInterrupt:
+        print("Start saving GIF files...")
         proc.terminate()
         proc.wait()
         if frames:

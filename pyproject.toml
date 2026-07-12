@@ -3,7 +3,7 @@ requires = ["setuptools>=64.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "termgif"
+name = "term2gif"
 version = "0.1.0"
 authors = [
   { name = "Fishgame Studio", email = "popxh@outlook.com" }

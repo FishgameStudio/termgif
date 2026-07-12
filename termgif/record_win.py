@@ -7,14 +7,26 @@ PowerShell:
 """
 
 # pyright: reportMissingTypeStubs=false, reportUnknownMemberType=false, reportAny=false
-import argparse
-import contextlib
-import json
-import time
+import argparse, json, time, sys, ctypes, contextlib
 
+def _get_console_encoding() -> str:
+    if sys.platform != "win32":
+        return "utf-8"
+    try:
+        codepage = ctypes.cdll.kernel32.GetConsoleOutputCP()
+        if codepage == 936:
+            return "gbk"
+        elif codepage == 65001:
+            return "utf-8"
+        return f"cp{codepage}"
+    except Exception:
+        return "gbk"
 
 def record_with_winpty(cmdlist: list[str], out_path: str, width: int = 80, height: int = 24) -> None:
     import winpty
+    # TODO: Support other platforms.
+    if sys.platform != "win32":
+        raise NotImplementedError("winpty recording only supports Windows platform in v0.1.0")
 
     # Build command line string for spawn (winpty expects a commandline string)
     cmdline: str = " ".join(cmdlist)
@@ -31,7 +43,7 @@ def record_with_winpty(cmdlist: list[str], out_path: str, width: int = 80, heigh
                 break
             # winpty returns str on Python3; ensure str
             if isinstance(data, bytes):
-                data = data.decode("utf-8", "replace")
+                data = data.decode(_get_console_encoding(), "replace")
             events.append([time.time() - start, data])
     finally:
         with contextlib.suppress(Exception):

@@ -16,11 +16,13 @@ import subprocess
 from typing import cast
 
 
-def record_window(cmdlist: list[str], out_path: str) -> None:
+def record_window(cmdlist: list[str], out_path: str, /, window_titles: list[str] | None = None) -> None:
     if sys.platform != "win32":
         raise NotImplementedError("Only supports Windows platform")
 
     cmd: str = " ".join(cmdlist)
+    if window_titles is None:
+        window_titles = ["cmd", "PowerShell"]
     # Launch target command in new console
     proc: subprocess.Popen[bytes] = subprocess.Popen(
         cmd,
@@ -33,9 +35,11 @@ def record_window(cmdlist: list[str], out_path: str) -> None:
     all_wins: list[pygetwindow.Win32Window] = cast(list[pygetwindow.Win32Window], pygetwindow.getAllWindows())
     console_win: pygetwindow.Win32Window | None = None
     for w in all_wins:
-        if w.title and ("cmd" in w.title or "PowerShell" in w.title):
-            console_win = w
-            break
+        if w.title:
+            for title in window_titles:
+                if w.title in title:
+                    console_win = w
+                    break
     if console_win is None:
         proc.terminate()
         raise RuntimeError("Cannot find target console window")
@@ -72,5 +76,7 @@ def record_window(cmdlist: list[str], out_path: str) -> None:
                 optimize=True
             )
             print(f"Saved GIF to {out_path}, total frames: {len(frames)}")
+            return
         else:
             print("No frames recorded")
+            return

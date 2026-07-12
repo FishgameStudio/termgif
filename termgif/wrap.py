@@ -33,12 +33,15 @@ No .cast text format is used in this workflow.
 def make_gif(
     cmd: str | list[str],
     output: str,
-    /
+    /,
+    win_name: str | list[str] | None
 ) -> None:
     # Build command list.
     cmdlist: list[str] = cmd if isinstance(cmd, list) else cmd.split(" ")
+    windows_name: list[str] = win_name if isinstance(win_name, list) else \
+        [win_name] if win_name is not None else ["cmd", "PowerShell"]
 
     from .record_win import record_window
 
     # Record window and generate .gif file.
-    record_window(cmdlist, output)
+    record_window(cmdlist, output, windows_name)

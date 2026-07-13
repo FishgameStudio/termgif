@@ -219,4 +219,4 @@ __marimo__/
 
 # Generated GIF file
 *.gif
-!assets/screenshot.gif
+!screenshots/*.gif

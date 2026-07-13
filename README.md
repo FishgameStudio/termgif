@@ -98,7 +98,8 @@ The goal is simple: make command-line demos more visual and lightweight.
 
 <p align="right"><a href="#readme-top">🔝back to top</a></p>
 
-
+### 📸 Screenshot
+![Screenshot](screenshots/screenshot2.gif)
 
 ### 🛠️ Built With
 

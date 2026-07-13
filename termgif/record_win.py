@@ -14,9 +14,12 @@ import pygetwindow
 from PIL import Image
 import subprocess
 from typing import cast
+import win32process as win32ps
 
+def _get_pid(w: pygetwindow.Win32Window) -> int:
+    return win32ps.GetWindowThreadProcessId(w._hWnd)[1] # pyright: ignore[reportPrivateUsage]
 
-def record_window(cmdlist: list[str], out_path: str, /, window_titles: list[str] | None = None) -> None:
+def record_window(cmdlist: list[str], out_path: str, /, window_titles: list[str] | None = None, win_pid: int | None = None, fps: int = 10, timeout: float = 3.0) -> None:
     if sys.platform != "win32":
         raise NotImplementedError("Only supports Windows platform")
 
@@ -27,20 +30,38 @@ def record_window(cmdlist: list[str], out_path: str, /, window_titles: list[str]
     proc: subprocess.Popen[bytes] = subprocess.Popen(
         cmd,
         creationflags=subprocess.CREATE_NEW_CONSOLE,
-        shell=True
+        shell=True, 
+        
     )
     time.sleep(0.3)
 
-    # Find new console window (match cmd/powershell roughly)
+    # Find new console window (match the specified title roughly)
     all_wins: list[pygetwindow.Win32Window] = cast(list[pygetwindow.Win32Window], pygetwindow.getAllWindows())
     console_win: pygetwindow.Win32Window | None = None
+
     print("Finding window...")
-    for w in all_wins:
-        if w.title:
-            for title in window_titles:
-                if title in w.title:
+
+    st = time.time()
+    # Loop polling to find window until found/timeout exits.
+    while time.time() - st < timeout:
+        # Search by the PID if specified.
+        if win_pid is not None:
+            for w in all_wins:
+                if _get_pid(w) == win_pid:
                     console_win = w
                     break
+        # Search by the specified title.
+        else:
+            for w in all_wins:
+                if w.title:
+                    for title in window_titles:
+                        if title in w.title:
+                            console_win = w
+                            break
+                    if console_win is not None:
+                        break  # Jumps out of the outermost for loop.
+        time.sleep(0.05)
+
     if console_win is None:
         proc.terminate()
         raise RuntimeError("Cannot find target console window")
@@ -53,7 +74,6 @@ def record_window(cmdlist: list[str], out_path: str, /, window_titles: list[str]
     }
 
     frames: list[Image.Image] = []
-    fps = 10
     frame_delay: float = 1 / fps
     print(f"Recording console window, Ctrl+C to stop and save GIF: {out_path}")
     try:
@@ -70,7 +90,7 @@ def record_window(cmdlist: list[str], out_path: str, /, window_titles: list[str]
         proc.wait()
         if frames:
             frames[0].save(
-                out_path,
+                fp=out_path,
                 save_all=True,
                 append_images=frames[1:],
                 duration=int(frame_delay * 1000),

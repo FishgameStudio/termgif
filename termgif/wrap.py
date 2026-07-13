@@ -1,47 +1,57 @@
 """
-Main function wrapper.
+Record a native Windows console session and export the recording as an animated GIF.
 
-Record native Windows console command interaction and export directly to a GIF image.
+Launches the target command in a separate Windows console window, captures real-time
+screen frames of the matched console window, and compiles the frames directly into a GIF file.
+Preserves the original console appearance, cursor state, and manual interactive input.
+Press Ctrl+C to stop recording early and finalize the GIF output.
 
 Positional-only Parameters
 --------------------------
 cmd : str | list[str]
-    Target command to execute in a new Windows native console window.
-    Pass a string for a full command, or list of strings for split arguments.
+    Target command to run in a new Windows native console window.
+    A full command string, or a list of split command arguments.
 output : str
-    Output file path of the generated GIF file (suffix .gif recommended).
+    Path to save the final animated GIF file (recommended suffix: .gif).
 
-Keyword Parameters
-------------------
+Other Parameters
+----------------
+win_name : str | list[str] | None, optional
+    Window title(s) to help match the target console window, e.g. "cmd", "PowerShell".
+    If None, defaults to ["cmd", "PowerShell"].
+win_pid : int | None, optional
+    Exact process ID (PID) of the target console process for precise window matching.
+    If specified, PID matching takes priority over title matching.
 fps : int, default=10
-    Frame rate of the final exported GIF animation. Lower value reduces file size.
+    Frames per second for the exported GIF animation.
+    Lower FPS reduces file size, higher FPS improves playback smoothness.
 
 Returns
 -------
 None
-    No return value, GIF file is written directly to given output path.
+    No return value; the GIF file is saved directly to the specified output path.
 
 Notes
 -----
-Performs real-time pixel capture of the native Windows console window,
-preserving original console visuals, cursor and manual input interactions.
-Press Ctrl+C to stop recording and finalize the GIF file.
-Windows-only (depends on mss, pygetwindow, Pillow).
-No .cast text format is used in this workflow.
+- Windows-only, depends on mss, pygetwindow, and Pillow libraries.
+- Uses real-time pixel capture of the raw Windows console window (not text-based .cast format).
+- Timeout for window discovery is fixed at 3 seconds.
+- Positional-only arguments (cmd, output) cannot be passed via keyword syntax.
 """
-
 def make_gif(
     cmd: str | list[str],
     output: str,
     /,
-    win_name: str | list[str] | None = None
+    win_name: str | list[str] | None = None, 
+    win_pid: int | None = None, 
+    fps: int = 10
 ) -> None:
     # Build command list.
     cmdlist: list[str] = cmd if isinstance(cmd, list) else cmd.split(" ")
-    windows_name: list[str] = win_name if isinstance(win_name, list) else \
+    window_name: list[str] = win_name if isinstance(win_name, list) else \
         [win_name] if win_name is not None else ["cmd", "PowerShell"]
 
     from .record_win import record_window
 
     # Record window and generate .gif file.
-    record_window(cmdlist, output, windows_name)
+    record_window(cmdlist, output, window_titles=window_name, win_pid=win_pid, fps=fps, timeout=3)

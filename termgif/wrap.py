@@ -51,7 +51,14 @@ def make_gif(
     window_name: list[str] = win_name if isinstance(win_name, list) else \
         [win_name] if win_name is not None else ["cmd", "PowerShell"]
 
-    from .record_win import record_window
-
     # Record window and generate .gif file.
-    record_window(cmdlist, output, window_titles=window_name, win_pid=win_pid, fps=fps)
+    from sys import platform
+    if platform == "win32":
+        from .record_win import record_window
+        record_window(cmdlist, output, window_titles=window_name, win_pid=win_pid, fps=fps)
+    elif platform == "darwin":
+        from .macos import record_window
+        record_window(cmdlist, output, window_titles=window_name, win_pid=win_pid, fps=fps)
+    elif platform in ("linux", "linux2"):
+        from .linux import record_window
+        record_window(cmdlist, output, fps=fps)  # No title and pid specification

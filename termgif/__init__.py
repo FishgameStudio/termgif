@@ -20,13 +20,25 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+"""
+``termgif`` can record the specified window and output GIF files.
+For complete informations see docs.
+# Main API
+- ``make_gif(...)``: Record a specified window context and output a GIF file to
+the path, returns None. This is the wrapped API to cross-platform.
+- ``record_window(...)``: Record a specified window on platform Windows. This is the raw API.
+"""
 
 from .record_win import record_window
 from .wrap import make_gif
+from . import linux
+from . import macos
 
 __version__ = "0.1.1"
 __author__ = "FishgameStudio"
 __all__ = [
     "make_gif",
     "record_window",
+    "linux", 
+    "macos"
 ]

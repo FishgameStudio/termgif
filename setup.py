@@ -7,7 +7,7 @@ README = (BASE_DIR / "README.md").read_text(encoding="utf-8")
 
 _ = setup(
     name="term2gif",
-    version="0.1.1",
+    version="0.2.0",
     author="Fishgame Studio",
     author_email="popxh@outlook.com",
     description="Lightweight GUI framework written in Python",

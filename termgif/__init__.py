@@ -39,7 +39,7 @@ from .wrap import make_gif
 from . import linux
 from . import macos
 
-__version__ = "0.1.1"
+__version__ = "0.2.0"
 __author__ = "FishgameStudio"
 __all__ = [
     "make_gif",

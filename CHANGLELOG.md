@@ -3,6 +3,62 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+---
+
+## \[v0.2.0\] - 2026-07-14
+
+### ✨ New Features
+- add official **macOS backend** (`termgif.macos.record_window`):
+  - Use AppleScript + System Events to enumerate terminal windows (Terminal.app / iTerm2)
+  - Inject unique dynamic window title for reliable target window matching
+  - PID + title matching + mss pixel capture for precise terminal GIF recording
+  - Yellow warning prompt + Ctrl+C stop & GIF export workflow consistent with Windows
+- Add official **Linux fallback backend** (`termgif.linux.record_window`):
+  - Pure `mss` + Pillow implementation (no external CLI tools / ffmpeg / Xlib dependencies)
+  - Wayland global restriction handling: full primary monitor capture mode
+  - Explicit warning for Wayland auto-single-window limitation
+  - Basic command launching + full-screen pixel capture + GIF export
+- Cross-platform entry point: update `make_gif()` to auto-detect OS and dispatch platform backends
+- API extensions: add `win_pid` (PID exact matching) & `fps` parameters to core functions for frame rate control
+- Expose new modules: `termgif.linux`, `termgif.macos` in `__init__.py` public API
+- Add structured public API documentation (`docs/api_reference.md`) with parameter spec, platform notes, exceptions
+
+### 📚 Documentation & Spec Updates
+- Rewrite commit convention docs (`COMMIT_CONVENTION.md`, `CONTRIBUTING.md`) to markdown table format
+  - Add emoji / type reference table + optional scope syntax `type-emoji type(scope): desc`
+  - Add alignment comment for consistent formatting
+- Complete API reference documentation with parameters, returns, raises, platform tags
+- Improve docstrings across all core modules (record\_win, linux, macos, wrap)
+- Update root package docstring for cross-platform overview
+- Update example GIF assets, remove old redundant screenshot files
+
+### 🔧 Dependencies & Packaging
+- Update `pyproject.toml` + `setup.py` dependencies: add `pywin32>=312`, align `PyGetWindow`, `mss`, `pillow` versions
+- Remove legacy unused dependencies (pyte, pywinpty)
+- Version bump to `0.1.1`
+
+### 🐛 Improvements & Refactors
+- Windows recorder (`record_win.py`):
+  - Add PID lookup via `win32process` for precise console matching
+  - Add `win_pid` and `fps` parameters, configurable frame rate
+  - Standard yellow ANSI warning prompt
+  - Improve window polling logic, fix GIF save parameter (`fp=`)
+  - Add type annotations, `from __future__ import annotations`
+- Consistent error handling & explicit `NotImplementedError` per platform backends
+- Standardize Ctrl+C keyboard interrupt flow, process cleanup, GIF saving logic
+- Add pyright type checking rules across source files
+
+### ⚠️ Known Limitations
+- Linux: Pure Wayland environments cannot auto-select individual terminal windows (security protocol restriction), uses full-monitor fallback mode
+- Linux: No per-window/PID targeted capture (X11-specific implementation not included in this base version)
+- macOS: Requires Terminal/iTerm2 + AppleScript permissions for window enumeration
+
+### 📝 Developer
+- Update CONTRIBUTING.md commit message format & add table layout
+- Add consistent code formatting & pyright lint configuration
+
+---
+
 ## \[v0.1.1\] - 2026-07-13
 ### ✨ Added
 - GitHub community templates: commit convention, discussion templates, bug/feature issue templates, PR template, release template

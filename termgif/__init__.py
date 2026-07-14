@@ -23,10 +23,13 @@
 """
 ``termgif`` can record the specified window and output GIF files.
 For complete informations see docs.
+
 # Main API
 - ``make_gif(...)``: Record a specified window context and output a GIF file to
-the path, returns None. This is the wrapped API to cross-platform.
-- ``record_window(...)``: Record a specified window on platform Windows. This is the raw API.
+the path, returns None. This is the wrapped cross-platform API.
+- ``record_window(...)``: Windows raw API for targeted window recording.
+- ``linux.record_window(...)``: Linux Wayland fallback recorder (full monitor capture only, no precise single-window tracking).
+
 """
 
 from .record_win import record_window

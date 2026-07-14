@@ -93,6 +93,47 @@ def _list_windows() -> list[dict[str, str | int]]:
 
 
 def record_window(cmdlist: list[str], out_path: str, /, window_titles: list[str] | None = None, win_pid: int | None = None, fps: int = 10) -> None:
+    """Record a macOS Terminal console window and export it as an animated GIF.
+
+    The command is launched inside Terminal.app with a unique injected window title.
+    The recorder then enumerates visible windows via AppleScript, selects the target
+    window (by PID, injected unique title, or title hints), captures pixel frames,
+    and saves them as a GIF.
+
+    Positional-only Parameters
+    --------------------------
+    cmdlist : list[str]
+        Split command arguments to run.
+    out_path : str
+        Output path for the GIF file.
+
+    Other Parameters
+    ----------------
+    window_titles : list[str] | None, optional
+        Title hints used to locate the target window (e.g. `Terminal`, `iTerm2`).
+        If `None`, defaults to `["Terminal", "iTerm2"]`.
+    win_pid : int | None, optional
+        Exact process PID for precise matching.
+        If provided, it takes priority over title matching.
+    fps : int, default=10
+        Frames per second.
+
+    Returns
+    -------
+    None
+        The GIF is saved directly to `out_path`.
+
+    Raises
+    ------
+    NotImplementedError
+        If called on a non-macOS platform.
+    RuntimeError
+        If the target window cannot be found.
+
+    Notes
+    -----
+    - Recording continues until `Ctrl+C` is pressed.
+    """
     if sys.platform != "darwin":
         raise NotImplementedError("Only supports macOS platform")
     prompt: str = "WARNING: Please don't record personal informations or secrets on the window."

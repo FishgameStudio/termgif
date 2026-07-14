@@ -1,42 +1,41 @@
-"""
-Record a native Windows console session and export the recording as an animated GIF.
+"""Create an animated GIF recording of an interactive terminal session.
 
-Launches the target command in a separate Windows console window, captures real-time
-screen frames of the matched console window, and compiles the frames directly into a GIF file.
-Preserves the original console appearance, cursor state, and manual interactive input.
-Press Ctrl+C to stop recording early and finalize the GIF output.
+This is the cross-platform entry point. Internally it dispatches to a platform-specific
+implementation:
+- Windows: targeted console window recording.
+- macOS: Terminal.app window recording by matching an injected unique window title.
+- Linux: Wayland/X11 fallback recording (full primary monitor capture).
 
 Positional-only Parameters
 --------------------------
 cmd : str | list[str]
-    Target command to run in a new Windows native console window.
-    A full command string, or a list of split command arguments.
+    Command to run in a new terminal/console.
+    - If `str`, it is split on spaces into arguments.
+    - If `list[str]`, it is treated as already-split arguments.
 output : str
-    Path to save the final animated GIF file (recommended suffix: .gif).
+    Path to write the resulting GIF file (typically ends with `.gif`).
 
 Other Parameters
 ----------------
 win_name : str | list[str] | None, optional
-    Window title(s) to help match the target console window, e.g. "cmd", "PowerShell".
-    If None, defaults to ["cmd", "PowerShell"].
+    Window title(s) used to locate the target window.
+    - If `None`, defaults to `["cmd", "PowerShell"]`.
+    - For macOS, common defaults are `Terminal` and `iTerm2`.
 win_pid : int | None, optional
-    Exact process ID (PID) of the target console process for precise window matching.
-    If specified, PID matching takes priority over title matching.
+    Exact process ID (PID) of the target console process.
+    If provided, PID matching takes priority over title matching.
 fps : int, default=10
-    Frames per second for the exported GIF animation.
-    Lower FPS reduces file size, higher FPS improves playback smoothness.
+    Frames per second for the exported GIF.
 
 Returns
 -------
 None
-    No return value; the GIF file is saved directly to the specified output path.
+    The GIF is written directly to `output`.
 
-Notes
------
-- Windows-only, depends on mss, pygetwindow, and Pillow libraries.
-- Uses real-time pixel capture of the raw Windows console window (not text-based .cast format).
-- Timeout for window discovery is fixed at 3 seconds.
-- Positional-only arguments (cmd, output) cannot be passed via keyword syntax.
+Raises
+------
+NotImplementedError
+    When the active platform is not supported by the selected backend.
 """
 def make_gif(
     cmd: str | list[str],

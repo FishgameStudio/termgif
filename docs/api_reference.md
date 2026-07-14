@@ -27,17 +27,16 @@ All public APIs are documented here.
 
 ---
 
-### `record_window(cmdlist: list[str], out_path: str, /, window_titles: list[str] | None = None, win_pid: int | None = None, fps: int = 10, timeout: float = 3.0) -> None`
+### `record_window(cmdlist: list[str], out_path: str, /, window_titles: list[str] | None = None, win_pid: int | None = None, fps: int = 10) -> None`
 
-Record a native Windows console window running the specified command and save the capture as an animated GIF file.
+Record a native Windows console window and save the capture as an animated GIF file.
 
-- `cmdlist`: List of split command arguments to launch the target Windows console process.
-- `out_path`: File path to save the final animated GIF output.
-- `window_titles`: List of window title patterns used to match the target console window for recording.
-- `win_pid`: Exact target console process ID (PID) for precise window matching; takes priority over title matching if provided.
-- `fps`: Frames per second for the exported GIF animation (default: 10). Lower values reduce file size.
-- `timeout`: Maximum time (seconds) allowed to locate the target console window before timing out (default: 3.0).
-- Returns: `None` (GIF file is written directly to the specified path).
+- `cmdlist`: Split command arguments to run in the new console.
+- `out_path`: Output path for the resulting GIF file.
+- `window_titles`: Title patterns used to match the target console window (used when `win_pid` is not provided).
+- `win_pid`: Exact target console process PID for precise matching (takes priority over `window_titles`).
+- `fps`: Frames per second for the exported GIF animation.
+- Returns: `None` (GIF is written directly to `out_path`).
 - Platform: **Windows only**
 
 ---

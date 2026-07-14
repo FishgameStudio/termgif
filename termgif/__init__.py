@@ -20,16 +20,18 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-"""
-``termgif`` can record the specified window and output GIF files.
-For complete informations see docs.
+"""termgif: record terminal windows and export animated GIFs.
 
-# Main API
-- ``make_gif(...)``: Record a specified window context and output a GIF file to
-the path, returns None. This is the wrapped cross-platform API.
-- ``record_window(...)``: Windows raw API for targeted window recording.
-- ``linux.record_window(...)``: Linux Wayland fallback recorder (full monitor capture only, no precise single-window tracking).
+Main APIs
+----------
+- `make_gif(...)`: Cross-platform entry point.
+- `record_window(...)`: Windows-specific targeted console window recorder.
+- `linux.record_window(...)`: Linux fallback recorder (typically full primary monitor capture).
+- `macos.record_window(...)`: macOS screen recorder with AppleScript.
 
+Documentation
+-------------
+See `docs/` and `docs/api_reference.md` for public API reference.
 """
 
 from .record_win import record_window

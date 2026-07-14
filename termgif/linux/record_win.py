@@ -43,11 +43,40 @@ def _get_primary_monitor_rect() -> _Rect:
 
 
 def record_window(cmdlist: list[str], out_path: str, /, fps: int = 10) -> None:
+    """Record an animated GIF using a Linux fallback (full primary monitor capture).
+
+    This backend is intended for environments where precise per-window tracking is not
+    available (notably Wayland).
+
+    Positional-only Parameters
+    --------------------------
+    cmdlist : list[str]
+        Split command arguments to run.
+    out_path : str
+        Output path for the GIF file.
+
+    Other Parameters
+    ----------------
+    fps : int, default=10
+        Frames per second.
+
+    Returns
+    -------
+    None
+        The GIF is saved directly to `out_path` when recording stops.
+
+    Raises
+    ------
+    NotImplementedError
+        If called on a non-Linux platform.
+    """
     if sys.platform not in ("linux", "linux2"):
         raise NotImplementedError("This fallback version is for Linux only")
 
-    prompt: str = "\x1b[93mWARNING: Wayland cannot auto-locate single terminal window; recording full primary monitor (static mode only).\033[0m"
-    print(prompt)
+    prompt: str = """WARNING:\n
+    Wayland cannot auto-locate single terminal window; recording full primary monitor (static mode only).\n
+    Please don't record personal informations or secrets on the window."""
+    print(f"\x1b[93m{prompt}\033[0m")
 
     cmd: str = " ".join(cmdlist)
     # Launch shell command (generic terminal, no auto window tracking for Wayland)

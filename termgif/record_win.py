@@ -1,8 +1,43 @@
-"""
-Simple Windows console pixel recorder, output GIF directly.
-Usage Examples::
+"""Record a native Windows console window and export it as an animated GIF.
 
-    record_window(['echo', 'hello, world!'], 'out.gif'， window_titles='my_console')
+The provided command is launched in a new Windows console. The recorder then locates
+the console window (by PID or by matching one of the given title patterns), captures
+screen frames using pixel-based screen grabbing, and saves them to `out_path`.
+
+Positional-only Parameters
+--------------------------
+cmdlist : list[str]
+    Split command arguments to run in the new console.
+out_path : str
+    Output path for the GIF file.
+
+Other Parameters
+----------------
+window_titles : list[str] | None, optional
+    Title patterns used to match the target console window.
+    If `None`, defaults to `["cmd", "PowerShell"]`.
+win_pid : int | None, optional
+    Exact target process PID for precise window matching.
+    If provided, it takes priority over `window_titles`.
+fps : int, default=10
+    Frames per second for the captured animation.
+
+Returns
+-------
+None
+    The GIF is saved directly to `out_path`.
+
+Raises
+------
+NotImplementedError
+    If called on a non-Windows platform.
+RuntimeError
+    If the target console window cannot be found.
+
+Notes
+-----
+- This is a pixel-based recorder (not a text/capture-format recorder).
+- Recording continues until `Ctrl+C` is pressed.
 """
 
 # pyright: reportMissingTypeStubs=false, reportUnknownMemberType=false, reportAny=false

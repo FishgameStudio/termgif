@@ -1,27 +1,34 @@
 """
 Simple Windows console pixel recorder, output GIF directly.
 Usage Examples::
-    
-    record_window(['echo', 'hello, world!'], 'out.gif')
+
+    record_window(['echo', 'hello, world!'], 'out.gif'， window_titles='my_console')
 """
 
 # pyright: reportMissingTypeStubs=false, reportUnknownMemberType=false, reportAny=false
 # pyright: reportUnusedCallResult=false, reportUnknownVariableType=false
-import time
+from __future__ import annotations
+
+import subprocess
 import sys
+import time
+from typing import cast
+
 import mss
 import pygetwindow
-from PIL import Image
-import subprocess
-from typing import cast
 import win32process as win32ps
+from PIL import Image
+
 
 def _get_pid(w: pygetwindow.Win32Window) -> int:
     return win32ps.GetWindowThreadProcessId(w._hWnd)[1] # pyright: ignore[reportPrivateUsage]
 
-def record_window(cmdlist: list[str], out_path: str, /, window_titles: list[str] | None = None, win_pid: int | None = None, fps: int = 10, timeout: float = 3.0) -> None:
+def record_window(cmdlist: list[str], out_path: str, /, window_titles: list[str] | None = None, win_pid: int | None = None, fps: int = 10) -> None:
     if sys.platform != "win32":
         raise NotImplementedError("Only supports Windows platform")
+    prompt: str = "WARNING: Please don't record personal informations or secrets on the window."
+    print(f"\x1b[93m{prompt}\033[0m")
+
 
     cmd: str = " ".join(cmdlist)
     if window_titles is None:
@@ -30,10 +37,10 @@ def record_window(cmdlist: list[str], out_path: str, /, window_titles: list[str]
     proc: subprocess.Popen[bytes] = subprocess.Popen(
         cmd,
         creationflags=subprocess.CREATE_NEW_CONSOLE,
-        shell=True, 
-        
+        shell=True,
+
     )
-    time.sleep(0.3)
+    time.sleep(0.5)
 
     # Find new console window (match the specified title roughly)
     all_wins: list[pygetwindow.Win32Window] = cast(list[pygetwindow.Win32Window], pygetwindow.getAllWindows())
@@ -41,26 +48,22 @@ def record_window(cmdlist: list[str], out_path: str, /, window_titles: list[str]
 
     print("Finding window...")
 
-    st = time.time()
-    # Loop polling to find window until found/timeout exits.
-    while time.time() - st < timeout:
-        # Search by the PID if specified.
-        if win_pid is not None:
-            for w in all_wins:
-                if _get_pid(w) == win_pid:
-                    console_win = w
-                    break
-        # Search by the specified title.
-        else:
-            for w in all_wins:
-                if w.title:
-                    for title in window_titles:
-                        if title in w.title:
-                            console_win = w
-                            break
-                    if console_win is not None:
-                        break  # Jumps out of the outermost for loop.
-        time.sleep(0.05)
+    # Search by the PID if specified.
+    if win_pid is not None:
+        for w in all_wins:
+            if _get_pid(w) == win_pid:
+                console_win = w
+                break
+    # Search by the specified title.
+    else:
+        for w in all_wins:
+            if w.title:
+                for title in window_titles:
+                    if title in w.title:
+                        console_win = w
+                        break
+                if console_win is not None:
+                    break  # Jumps out of the outermost for loop.
 
     if console_win is None:
         proc.terminate()

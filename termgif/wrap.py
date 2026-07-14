@@ -42,8 +42,8 @@ def make_gif(
     cmd: str | list[str],
     output: str,
     /,
-    win_name: str | list[str] | None = None, 
-    win_pid: int | None = None, 
+    win_name: str | list[str] | None = None,
+    win_pid: int | None = None,
     fps: int = 10
 ) -> None:
     # Build command list.
@@ -54,4 +54,4 @@ def make_gif(
     from .record_win import record_window
 
     # Record window and generate .gif file.
-    record_window(cmdlist, output, window_titles=window_name, win_pid=win_pid, fps=fps, timeout=3)
+    record_window(cmdlist, output, window_titles=window_name, win_pid=win_pid, fps=fps)

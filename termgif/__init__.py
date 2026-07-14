@@ -20,13 +20,30 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+"""termgif: record terminal windows and export animated GIFs.
+
+Main APIs
+----------
+- `make_gif(...)`: Cross-platform entry point.
+- `record_window(...)`: Windows-specific targeted console window recorder.
+- `linux.record_window(...)`: Linux fallback recorder (typically full primary monitor capture).
+- `macos.record_window(...)`: macOS screen recorder with AppleScript.
+
+Documentation
+-------------
+See `docs/` and `docs/api_reference.md` for public API reference.
+"""
 
 from .record_win import record_window
 from .wrap import make_gif
+from . import linux
+from . import macos
 
-__version__ = "0.1.1"
+__version__ = "0.2.0"
 __author__ = "FishgameStudio"
 __all__ = [
     "make_gif",
     "record_window",
+    "linux", 
+    "macos"
 ]

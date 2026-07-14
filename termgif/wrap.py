@@ -1,47 +1,63 @@
-"""
-Main function wrapper.
+"""Create an animated GIF recording of an interactive terminal session.
 
-Record native Windows console command interaction and export directly to a GIF image.
+This is the cross-platform entry point. Internally it dispatches to a platform-specific
+implementation:
+- Windows: targeted console window recording.
+- macOS: Terminal.app window recording by matching an injected unique window title.
+- Linux: Wayland/X11 fallback recording (full primary monitor capture).
 
 Positional-only Parameters
 --------------------------
 cmd : str | list[str]
-    Target command to execute in a new Windows native console window.
-    Pass a string for a full command, or list of strings for split arguments.
+    Command to run in a new terminal/console.
+    - If `str`, it is split on spaces into arguments.
+    - If `list[str]`, it is treated as already-split arguments.
 output : str
-    Output file path of the generated GIF file (suffix .gif recommended).
+    Path to write the resulting GIF file (typically ends with `.gif`).
 
-Keyword Parameters
-------------------
+Other Parameters
+----------------
+win_name : str | list[str] | None, optional
+    Window title(s) used to locate the target window.
+    - If `None`, defaults to `["cmd", "PowerShell"]`.
+    - For macOS, common defaults are `Terminal` and `iTerm2`.
+win_pid : int | None, optional
+    Exact process ID (PID) of the target console process.
+    If provided, PID matching takes priority over title matching.
 fps : int, default=10
-    Frame rate of the final exported GIF animation. Lower value reduces file size.
+    Frames per second for the exported GIF.
 
 Returns
 -------
 None
-    No return value, GIF file is written directly to given output path.
+    The GIF is written directly to `output`.
 
-Notes
------
-Performs real-time pixel capture of the native Windows console window,
-preserving original console visuals, cursor and manual input interactions.
-Press Ctrl+C to stop recording and finalize the GIF file.
-Windows-only (depends on mss, pygetwindow, Pillow).
-No .cast text format is used in this workflow.
+Raises
+------
+NotImplementedError
+    When the active platform is not supported by the selected backend.
 """
-
 def make_gif(
     cmd: str | list[str],
     output: str,
     /,
-    win_name: str | list[str] | None = None
+    win_name: str | list[str] | None = None,
+    win_pid: int | None = None,
+    fps: int = 10
 ) -> None:
     # Build command list.
     cmdlist: list[str] = cmd if isinstance(cmd, list) else cmd.split(" ")
-    windows_name: list[str] = win_name if isinstance(win_name, list) else \
+    window_name: list[str] = win_name if isinstance(win_name, list) else \
         [win_name] if win_name is not None else ["cmd", "PowerShell"]
 
-    from .record_win import record_window
-
     # Record window and generate .gif file.
-    record_window(cmdlist, output, windows_name)
+    from sys import platform
+    if platform == "win32":
+        from .record_win import record_window
+        record_window(cmdlist, output, window_titles=window_name, win_pid=win_pid, fps=fps)
+    elif platform == "darwin":
+        from .macos import record_window
+        record_window(cmdlist, output, window_titles=window_name, win_pid=win_pid, fps=fps)
+    elif platform in ("linux", "linux2"):
+        from .linux import record_window
+        record_window(cmdlist, output, fps=fps)  # No title and pid specification

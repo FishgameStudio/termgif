@@ -86,20 +86,20 @@
 
 > ***"Creating clean, visually appealing demo screenshots for command-line tutorials can often be a tedious hassle—working with asciinema and ffmpeg involves a convoluted workflow. In reality, however, simply feeding it an API will resolve all such issues."***
 
-**termgif** is a lightweight tool for static-build GIF generation. On Windows it records your terminal command execution (producing a cast JSON), then renders the captured output into an animated GIF.
+**termgif** is a cross-platform lightweight terminal GIF recorder for Windows, macOS and Linux. It captures live terminal command execution via pixel recording and exports directly to an animated GIF.
 
-The goal is simple: make command-line demos more visual and lightweight.
+The goal is simple: create clean, shareable command-line demo GIFs with minimal dependencies.
 
 **Main flow**:
 
-1. 🎥 **Record**: Launch Windows native console process, locate the live console window, real-time pixel capture
-2. 🔄 **Process**: Collect continuous screen frames during command execution
-3. 🧩 **Generate**: Encode captured frames and export final animated GIF file directly
+1. 🎥 **Record**: Launch target terminal commands, capture live screen frames (platform-aware window/region capture)
+2. 🔄 **Stream**: Continuously collect pixel frames while the command runs
+3. 🧩 **Generate**: Encode frames and export a final animated GIF on Ctrl+C
 
 <p align="right"><a href="#readme-top">🔝back to top</a></p>
 
 ### 📸 Screenshot
-![Screenshot](screenshots/screenshot2.gif)
+![Screenshot](screenshots/recording.gif)
 
 ### 🛠️ Built With
 
@@ -169,8 +169,8 @@ _For more examples, please refer to the [Documentation](docs) or [Examples](exam
 <!-- ROADMAP -->
 ## 🗺️ Roadmap
 - [x] **v0.1.0**: Basic recording for Windows
-- [ ] **v0.2.0**:
-    - [ ] Support for macOS and Linux
+- [x] **v0.2.0**:
+    - [x] Support for macOS and Linux
     - [x] Support for recording live inputting text on console (`stdin`)
     - [x] Support recording live console (with echo and color)
 

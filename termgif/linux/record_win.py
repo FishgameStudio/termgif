@@ -6,7 +6,6 @@ Usage Examples::
     record_window(['echo', 'hello, world!'], 'out.gif')
 """
 
-# pyright: reportMissingTypeStubs=false, reportUnknownMemberType=false
 # pyright: reportUnusedCallResult=false, reportUnknownVariableType=false
 # pyright: reportAny=false
 

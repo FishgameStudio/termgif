@@ -31,7 +31,7 @@
 ![Issues](https://img.shields.io/github/issues/FishgameStudio/termgif)
 ![PRs](https://img.shields.io/github/issues-pr/FishgameStudio/termgif)
 [![CommitCount](https://badgen.net/github/commits/FishgameStudio/termgif/main)](https://github.com/FishgameStudio/termgif/commits/main)
-[![PyPI](https://img.shields.io/pypi/v/termgif?style=color=orange)](https://pypi.com/project/termgif)
+[![PyPI](https://img.shields.io/pypi/v/term2gif?style=color=orange)](https://pypi.com/project/term2gif)
 ![Size](https://img.shields.io/github/repo-size/FishgameStudio/termgif)
 ![Welcome](https://img.shields.io/badge/PRs%20%26%20Issues-welcome-bluevoilet)
 [![License](https://img.shields.io/github/license/FishgameStudio/termgif)](LICENSE)

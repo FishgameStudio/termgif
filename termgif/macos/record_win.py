@@ -16,6 +16,7 @@ from typing import cast
 
 import mss
 from PIL import Image
+from contextlib import suppress
 
 
 def _run_applescript(script: str) -> str:
@@ -136,7 +137,10 @@ def record_window(cmdlist: list[str], out_path: str, /, window_titles: list[str]
     """
     if sys.platform != "darwin":
         raise NotImplementedError("Only supports macOS platform")
-    prompt: str = "WARNING: Please don't record personal informations or secrets on the window."
+    prompt: str = """
+WARNING: Please don't record personal informations or secrets on the window.
+WARNING: Please enable the access of your editor before recording.
+"""
     print(f"\x1b[93m{prompt}\033[0m")
 
     cmd: str = " ".join(cmdlist)
@@ -155,6 +159,7 @@ def record_window(cmdlist: list[str], out_path: str, /, window_titles: list[str]
 
     # Ask Terminal to run bash -lc "<inner_cmd>"
     applescript_launch: str = f'tell application "Terminal" to do script "bash -lc \\"{inner_cmd_escaped}\\""'
+    print("Launching AppleScript...")
     proc: subprocess.Popen[bytes] = subprocess.Popen(
         ["osascript", "-e", applescript_launch],
         stdout=subprocess.PIPE,
@@ -200,10 +205,8 @@ def record_window(cmdlist: list[str], out_path: str, /, window_titles: list[str]
                 break
 
     if console_win is None:
-        try:
+        with suppress(Exception):
             proc.terminate()
-        except Exception:
-            pass
         raise RuntimeError("Cannot find target console window")
 
     # Extract region from window info

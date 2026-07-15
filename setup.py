@@ -2,8 +2,8 @@ from pathlib import Path
 
 from setuptools import find_packages, setup
 
-BASE_DIR = Path(__file__).parent
-README = (BASE_DIR / "README.md").read_text(encoding="utf-8")
+BASE_DIR: Path = Path(__file__).parent
+README: str = (BASE_DIR / "README.md").read_text(encoding="utf-8")
 
 _ = setup(
     name="term2gif",
@@ -16,14 +16,14 @@ _ = setup(
     url="https://github.com/FishgameStudio/termgif",
     license="MIT",
     python_requires=">=3.10",
-    packages=find_packages("termgif"),
+    packages=find_packages(where="termgif"),
     package_dir={"termgif": "termgif"},
     package_data={
         "ohmygui": [
             "termgif/assets/*", "assets/*"
         ]
     },
-    keywords=["term2gif", "termgif", "gif", "gif-generator", "terminal"],
+    keywords=["term2gif", "gif", "gif-generator", "terminal"],
     classifiers=[
         "Programming Language :: Python :: 3.12",
         "Programming Language :: Python :: 3.13",
@@ -40,7 +40,6 @@ _ = setup(
         "pillow>=12.3.0", 
         "PyGetWindow>=0.0.9", 
         "mss>=10.2.0", 
-        "pywin32>=312"
     ],
     extras_require={
         "dev": [

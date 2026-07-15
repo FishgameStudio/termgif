@@ -38,7 +38,7 @@ if sys.platform not in ("win32", "darwin", "linux", "linux2"):
 
 from .wrap import make_gif
 
-__version__ = "0.2.1"
+__version__ = "0.2.2"
 __author__ = "FishgameStudio"
 __all__ = [
     "make_gif"

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "term2gif"
-version = "0.2.1"
+version = "0.2.2"
 authors = [
   { name = "Fishgame Studio", email = "popxh@outlook.com" }
 ]
@@ -12,7 +12,7 @@ description = "A simple and lightweight static GIF generator."
 readme = "README.md"
 requires-python = ">=3.10"
 license = { file = "LICENSE" }
-keywords = ["term2gif", "termgif", "gif", "generator", "terminal"]
+keywords = ["term2gif", "gif", "generator", "terminal"]
 classifiers = [
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",

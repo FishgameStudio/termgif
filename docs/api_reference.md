@@ -17,7 +17,7 @@ function-usage.
 
 *** This api_reference.md only refer to the Python public APIs,
 *** Do not add private APIs to this file.
-*** For clarity, please only document APIs explicitly listed in __all__ in __init__.py.
+*** For clarity, please only document APIs explicitly listed in __all__ in **/__init__.py.
 
 -->
 

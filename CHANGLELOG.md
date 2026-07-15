@@ -5,6 +5,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ---
 
+## \[0.2.2\] - 2026-07-15
+
+### ♻️ Changed
+- **Package name**: PyPI package renamed from `termgif` to `term2gif` to resolve naming conflicts and align with project branding.
+- **Version bump**: Updated version from `0.2.0` to `0.2.2` across `pyproject.toml`, `setup.py`, and `__init__.py`.
+- **Platform detection**: Refactored platform-specific imports in `wrap.py` to use `match/case` syntax for cleaner cross-platform dispatching.
+- **Type annotations**: Added explicit type hints (`Path`, `str`) in `setup.py` for better code clarity.
+- **macOS recorder**: Improved user-facing warnings and added AppleScript launch feedback message.
+- **Error handling**: Replaced bare `try/except` with `contextlib.suppress(Exception)` in macOS recorder cleanup.
+
+### 🔥 Removed
+- **Windows-specific dependency**: Removed `pywin32>=312` from core dependencies in both `pyproject.toml` and `setup.py`.
+- **Platform submodules from public API**: Removed `linux`, `macos`, and `record_window` from `__all__` in `__init__.py`. The cross-platform `make_gif()` is now the sole public entry point.
+- **Keyword cleanup**: Removed `"termgif"` from package keywords to reflect the rename.
+
+### 🐛 Fixed
+- **API documentation**: Fixed glob pattern reference in `docs/api_reference.md` (`__init__.py` → `**/__init__.py`).
+- **Package discovery**: Updated `find_packages()` call in `setup.py` to use keyword argument `where="termgif"`.
+- **Platform validation**: Added explicit platform check at module load time, raising `NotImplementedError` for unsupported platforms.
+- **macOS window detection**: Expanded default window title search to include `"Terminal"` alongside `"cmd"` and `"PowerShell"`.
+
+### ✨ Added
+- **macOS test**: Added `tests/macos_test.py` for local macOS window recording validation.
+
+---
+
 ## \[v0.2.0\] - 2026-07-14
 
 ### ✨ New Features

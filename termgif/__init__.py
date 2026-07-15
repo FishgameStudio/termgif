@@ -25,25 +25,21 @@
 Main APIs
 ----------
 - `make_gif(...)`: Cross-platform entry point.
-- `record_window(...)`: Windows-specific targeted console window recorder.
-- `linux.record_window(...)`: Linux fallback recorder (typically full primary monitor capture).
-- `macos.record_window(...)`: macOS screen recorder with AppleScript.
 
 Documentation
 -------------
 See `docs/` and `docs/api_reference.md` for public API reference.
 """
 
-from .record_win import record_window
+import sys
+if sys.platform not in ("win32", "darwin", "linux", "linux2"):
+    raise NotImplementedError(f"Not implemented for platform {sys.platform} :D")
+
+
 from .wrap import make_gif
-from . import linux
-from . import macos
 
 __version__ = "0.2.1"
 __author__ = "FishgameStudio"
 __all__ = [
-    "make_gif",
-    "record_window",
-    "linux", 
-    "macos"
+    "make_gif"
 ]

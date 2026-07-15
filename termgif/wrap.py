@@ -48,16 +48,19 @@ def make_gif(
     # Build command list.
     cmdlist: list[str] = cmd if isinstance(cmd, list) else cmd.split(" ")
     window_name: list[str] = win_name if isinstance(win_name, list) else \
-        [win_name] if win_name is not None else ["cmd", "PowerShell"]
+        [win_name] if win_name is not None else ["cmd", "PowerShell", "Terminal"]
 
     # Record window and generate .gif file.
-    from sys import platform
-    if platform == "win32":
-        from .record_win import record_window
-        record_window(cmdlist, output, window_titles=window_name, win_pid=win_pid, fps=fps)
-    elif platform == "darwin":
-        from .macos import record_window
-        record_window(cmdlist, output, window_titles=window_name, win_pid=win_pid, fps=fps)
-    elif platform in ("linux", "linux2"):
-        from .linux import record_window
-        record_window(cmdlist, output, fps=fps)  # No title and pid specification
+    import sys
+    match sys.platform:
+        case "win32":
+            from .record_win import record_window as win_record
+            win_record(cmdlist, output, window_titles=window_name, win_pid=win_pid, fps=fps)
+        case "linux":
+            from .linux.record_win import record_window as linux_record
+            linux_record(cmdlist, output, fps=fps)  # No specification of title & pid
+        case "darwin":
+            from .macos.record_win import record_window as macos_record
+            macos_record(cmdlist, output, window_titles=window_name, win_pid=win_pid, fps=fps)
+        case _:
+            raise NotImplementedError("Not implemented for other platforms :D")

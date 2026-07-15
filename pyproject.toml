@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "term2gif"
-version = "0.2.0"
+version = "0.2.1"
 authors = [
   { name = "Fishgame Studio", email = "popxh@outlook.com" }
 ]

@@ -37,7 +37,7 @@ def _list_windows() -> list[dict[str, str | int]]:
       x, y, width, height: ints (position and size)
     The AppleScript uses System Events to enumerate visible windows.
     """
-    applescript = r'''
+    applescript = r"""
     set out to ""
     tell application "System Events"
       set procs to application processes
@@ -64,7 +64,7 @@ def _list_windows() -> list[dict[str, str | int]]:
       end repeat
     end tell
     return out
-    '''
+    """
     raw: str = _run_applescript(applescript)
     lines: list[str] = [ln for ln in raw.splitlines() if ln.strip()]
     results: list[dict[str, str | int]] = []
@@ -81,19 +81,28 @@ def _list_windows() -> list[dict[str, str | int]]:
             h: int = int(float(h_s))
         except Exception:
             continue
-        results.append({
-            "owner": owner,
-            "pid": pid,
-            "name": name,
-            "x": x,
-            "y": y,
-            "width": w,
-            "height": h,
-        })
+        results.append(
+            {
+                "owner": owner,
+                "pid": pid,
+                "name": name,
+                "x": x,
+                "y": y,
+                "width": w,
+                "height": h,
+            }
+        )
     return results
 
 
-def record_window(cmdlist: list[str], out_path: str, /, window_titles: list[str] | None = None, win_pid: int | None = None, fps: int = 10) -> None:
+def record_window(
+    cmdlist: list[str],
+    out_path: str,
+    /,
+    window_titles: list[str] | None = None,
+    win_pid: int | None = None,
+    fps: int = 10,
+) -> None:
     """Record a macOS Terminal console window and export it as an animated GIF.
 
     The command is launched inside Terminal.app with a unique injected window title.
@@ -185,7 +194,7 @@ WARNING: Please enable the access of your editor before recording.
     # Prefer matching the unique title we injected
     if console_win is None:
         for w in all_wins:
-            name = str(w.get("name") or "") 
+            name = str(w.get("name") or "")
             if unique_title in name:
                 console_win = w
                 break
@@ -215,12 +224,7 @@ WARNING: Please enable the access of your editor before recording.
     width: int = int(console_win.get("width", 0))
     height: int = int(console_win.get("height", 0))
 
-    region: dict[str, float] = {
-        "top": float(y),
-        "left": float(x),
-        "width": float(width),
-        "height": float(height)
-    }
+    region: dict[str, float] = {"top": float(y), "left": float(x), "width": float(width), "height": float(height)}
 
     frames: list[Image.Image] = []
     frame_delay: float = 1 / fps
@@ -254,7 +258,7 @@ WARNING: Please enable the access of your editor before recording.
                 append_images=frames[1:],
                 duration=int(frame_delay * 1000),
                 loop=0,
-                optimize=True
+                optimize=True,
             )
             print(f"Saved GIF to {out_path}, total frames: {len(frames)}")
             return

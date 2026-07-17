@@ -80,21 +80,12 @@ def record_window(cmdlist: list[str], out_path: str, /, fps: int = 10) -> None:
 
     cmd: str = " ".join(cmdlist)
     # Launch shell command (generic terminal, no auto window tracking for Wayland)
-    proc: subprocess.Popen[bytes] = subprocess.Popen(
-        cmd,
-        shell=True,
-        start_new_session=True
-    )
+    proc: subprocess.Popen[bytes] = subprocess.Popen(cmd, shell=True, start_new_session=True)
     time.sleep(0.3)
 
     # Fallback: whole primary monitor
     rect = _get_primary_monitor_rect()
-    region: dict[str, int] = {
-        "top": rect.top,
-        "left": rect.left,
-        "width": rect.width,
-        "height": rect.height
-    }
+    region: dict[str, int] = {"top": rect.top, "left": rect.left, "width": rect.width, "height": rect.height}
 
     frames: list[Image.Image] = []
     frame_delay: float = 1 / fps
@@ -119,7 +110,7 @@ def record_window(cmdlist: list[str], out_path: str, /, fps: int = 10) -> None:
                 append_images=frames[1:],
                 duration=int(frame_delay * 1000),
                 loop=0,
-                optimize=True
+                optimize=True,
             )
             print(f"Saved GIF to {out_path}, total frames: {len(frames)}")
             return

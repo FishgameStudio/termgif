@@ -32,6 +32,7 @@ See `docs/` and `docs/api_reference.md` for public API reference.
 """
 
 import sys
+
 if sys.platform not in ("win32", "darwin", "linux", "linux2"):
     raise NotImplementedError(f"Not implemented for platform {sys.platform} :D")
 
@@ -40,6 +41,4 @@ from .wrap import make_gif
 
 __version__ = "0.2.2"
 __author__ = "FishgameStudio"
-__all__ = [
-    "make_gif"
-]
+__all__ = ["make_gif"]

@@ -37,30 +37,39 @@ Raises
 NotImplementedError
     When the active platform is not supported by the selected backend.
 """
+
+
 def make_gif(
     cmd: str | list[str],
     output: str,
     /,
     win_name: str | list[str] | None = None,
     win_pid: int | None = None,
-    fps: int = 10
+    fps: int = 10,
 ) -> None:
     # Build command list.
     cmdlist: list[str] = cmd if isinstance(cmd, list) else cmd.split(" ")
-    window_name: list[str] = win_name if isinstance(win_name, list) else \
-        [win_name] if win_name is not None else ["cmd", "PowerShell", "Terminal"]
+    window_name: list[str] = (
+        win_name
+        if isinstance(win_name, list)
+        else [win_name] if win_name is not None else ["cmd", "PowerShell", "Terminal"]
+    )
 
     # Record window and generate .gif file.
     import sys
+
     match sys.platform:
         case "win32":
             from .record_win import record_window as win_record
+
             win_record(cmdlist, output, window_titles=window_name, win_pid=win_pid, fps=fps)
         case "linux":
             from .linux.record_win import record_window as linux_record
+
             linux_record(cmdlist, output, fps=fps)  # No specification of title & pid
         case "darwin":
             from .macos.record_win import record_window as macos_record
+
             macos_record(cmdlist, output, window_titles=window_name, win_pid=win_pid, fps=fps)
         case _:
             raise NotImplementedError("Not implemented for other platforms :D")

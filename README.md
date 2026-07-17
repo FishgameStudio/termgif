@@ -231,5 +231,6 @@ Project Link: [https://github.com/FishgameStudio/termgif](https://github.com/Fis
 * [Pillow](https://github.com/python-pillow/Pillow)
 * [PythonMSS](https://github.com/BoboTiG/python-mss)
 * [PyGetWindow](https://github.com/asweigart/pygetwindow)
+* [tqdm](https://github.com/tqdm/tqdm)
 
 <p align="right"><a href="#readme-top">🔝back to top</a></p>

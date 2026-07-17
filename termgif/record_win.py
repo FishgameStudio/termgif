@@ -56,14 +56,21 @@ from PIL import Image
 
 
 def _get_pid(w: pygetwindow.Win32Window) -> int:
-    return win32ps.GetWindowThreadProcessId(w._hWnd)[1] # pyright: ignore[reportPrivateUsage]
+    return win32ps.GetWindowThreadProcessId(w._hWnd)[1]  # pyright: ignore[reportPrivateUsage]
 
-def record_window(cmdlist: list[str], out_path: str, /, window_titles: list[str] | None = None, win_pid: int | None = None, fps: int = 10) -> None:
+
+def record_window(
+    cmdlist: list[str],
+    out_path: str,
+    /,
+    window_titles: list[str] | None = None,
+    win_pid: int | None = None,
+    fps: int = 10,
+) -> None:
     if sys.platform != "win32":
         raise NotImplementedError("Only supports Windows platform")
     prompt: str = "WARNING: Please don't record personal informations or secrets on the window."
     print(f"\x1b[93m{prompt}\033[0m")
-
 
     cmd: str = " ".join(cmdlist)
     if window_titles is None:
@@ -73,7 +80,6 @@ def record_window(cmdlist: list[str], out_path: str, /, window_titles: list[str]
         cmd,
         creationflags=subprocess.CREATE_NEW_CONSOLE,
         shell=True,
-
     )
     time.sleep(0.5)
 
@@ -108,7 +114,7 @@ def record_window(cmdlist: list[str], out_path: str, /, window_titles: list[str]
         "top": console_win.top,
         "left": console_win.left,
         "width": console_win.width,
-        "height": console_win.height
+        "height": console_win.height,
     }
 
     frames: list[Image.Image] = []
@@ -127,13 +133,14 @@ def record_window(cmdlist: list[str], out_path: str, /, window_titles: list[str]
         proc.terminate()
         proc.wait()
         if frames:
+            from tqdm import tqdm
             frames[0].save(
                 fp=out_path,
                 save_all=True,
-                append_images=frames[1:],
+                append_images=tqdm(frames[1:], desc="Encoding GIF frames", unit="frame"),
                 duration=int(frame_delay * 1000),
                 loop=0,
-                optimize=True
+                optimize=True,
             )
             print(f"Saved GIF to {out_path}, total frames: {len(frames)}")
             return

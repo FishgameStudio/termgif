@@ -19,24 +19,29 @@ Third-Party Notices
 This project includes third-party software components used by the code. The following third-party components are identified by import/usage in the source files. For each component, the corresponding upstream license and copyright/attribution apply.
 
 1) Pillow (PIL Fork) / PIL (Python Imaging Library)
-- Purpose: Used by termgif/convert.py and termgif/record_win.py to render frames and assemble animated GIF output.
+- Purpose: Used by the platform recorders to convert captured pixel buffers into frames and assemble animated GIF output.
 - License (upstream): Historical Permission Notice and Disclaimer (PIL Software License / BSD-like). Pillow is distributed under the MIT-CMU license (permissive).
 - Copyright/Attribution: Copyright (c) 1997-2024 by Fredrik Lundh and contributors. (As published by the upstream project.)
 - Upstream: https://github.com/python-pillow/Pillow
 
 2) python-mss (mss)
-- Purpose: Used by termgif/record_win.py to capture screen frames of Windows console windows for GIF recording.
+- Purpose: Used on Windows/macOS/Linux recorders to capture screen frames (pixel grabbing) for GIF recording.
 - License (upstream): MIT License.
 - Copyright/Attribution: Copyright (c) 2016-2024 Thomas A. Casimir and contributors.
 - Upstream: https://github.com/BoboTiG/python-mss
 
 3) PyGetWindow
-- Purpose: Used by termgif/record_win.py to locate and get bounds of Windows console windows for screen capture.
+- Purpose: Used by the Windows recorder to locate and get bounds of the target console window for screen capture.
 - License (upstream): BSD 3-Clause License.
 - Copyright/Attribution: Copyright (c) 2014-2024 Al Sweigart and contributors. (As published by the upstream project.)
 - Upstream: https://github.com/asweigart/pygetwindow
 
+4) tqdm
+- Purpose: Progress reporting in the project (e.g., while processing/encoding frames).
+- License (upstream): MPL 2.0 License.
+- Copyright/Attribution: Copyright (c) 2013-2024 by tqdm contributors.
+- Upstream: https://github.com/tqdm/tqdm
+
+
 Notes
 - This NOTICE identifies third-party components based on static analysis of imports within the repository. Exact versions are determined by your packaging/build environment (e.g., your dependency lock files / PyPI resolution). If you need version-precise notices, please provide the generated dependency list/lock file from your build pipeline.
-
-

@@ -40,6 +40,7 @@ _ = setup(
         "pillow>=12.3.0", 
         "PyGetWindow>=0.0.9", 
         "mss>=10.2.0", 
+        "tqdm>=4.68.0",
     ],
     extras_require={
         "dev": [

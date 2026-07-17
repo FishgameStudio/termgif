@@ -252,10 +252,11 @@ WARNING: Please enable the access of your editor before recording.
                 pass
 
         if frames:
+            from tqdm import tqdm
             frames[0].save(
                 fp=out_path,
                 save_all=True,
-                append_images=frames[1:],
+                append_images=tqdm(frames[1:], desc="Encoding GIF frames", unit="frame"),
                 duration=int(frame_delay * 1000),
                 loop=0,
                 optimize=True,
